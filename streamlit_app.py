@@ -129,7 +129,7 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
 
                             for image in st.session_state.generated_image:
                                 with st.container():
-                                    st.image(image, caption="Generated Image 🎈", use_column_width=True)
+                                    st.image(image, caption="Generated Image", use_column_width=True)
                                     all_images.append(image)
 
                                     response = requests.get(image)
