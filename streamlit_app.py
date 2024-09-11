@@ -57,7 +57,7 @@ st.markdown(
     """, unsafe_allow_html=True
 )
 
-st.markdown("sixtyoneeighty Image AI")
+st.markdown("# sixtyoneeighty")
 
 # API Tokens and endpoints from `.streamlit/secrets.toml` file
 REPLICATE_API_TOKEN = st.secrets["REPLICATE_API_TOKEN"]
