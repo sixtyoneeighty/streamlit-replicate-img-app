@@ -167,4 +167,16 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
                 "A robot bartender serving drinks to human and alien patrons in a sleek space station lounge, realistic.",
                 "A group of friends laughing and dancing at a music festival, joyful atmosphere, 35mm film photography",
                 "A wizard casting a spell, intense magical energy glowing from his hands",
-                "A women street skateboarding in Paris Olympics 202
+                "A woman street skateboarding in Paris Olympics 2024",
+                "Anime style portrait of a female samurai at a beautiful lake with cherry trees, mountain fuji background, spring, sunset",
+                "A photorealistic close-up portrait of a bearded viking warrior in a horned helmet. He stares intensely into the distance while holding a battle axe. Dramatic mood lighting."
+            ],
+            use_container_width=True
+        )
+
+def main():
+    submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt = configure_sidebar()
+    main_page(submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt)
+
+if __name__ == "__main__":
+    main()
