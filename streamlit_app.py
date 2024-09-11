@@ -6,11 +6,6 @@ import io
 from utils import icon
 from streamlit_image_select import image_select
 
-# UI configurations (this must be at the very top)
-st.set_page_config(page_title="sixtyoneeighty Image AI",
-                   page_icon=":bridge_at_night:",
-                   layout="wide")
-
 # Custom CSS for the background and fonts
 st.markdown(
     """
@@ -74,6 +69,11 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+# UI configurations
+st.set_page_config(page_title="sixtyoneeighty Image AI",
+                   page_icon=":bridge_at_night:",
+                   layout="wide")
+
 icon.show_icon(":foggy:")
 st.markdown("# :rainbow[sixtyoneeighty Image AI]")
 
@@ -90,6 +90,11 @@ def configure_sidebar() -> None:
         with st.form("my_form"):
             # Display logo.png instead of text
             st.image("gallery/logo.png", use_column_width=True)
+
+            # First, the prompt field
+            prompt = st.text_area(":orange[**Enter prompt: Your idea goes here**]", value="An astronaut riding a rainbow unicorn, cinematic, dramatic")
+
+            # Then the Advanced Settings
             with st.expander(":rainbow[**Advanced Settings**]"):
                 # Advanced Settings for Flux-Dev
                 width = st.number_input("Width of output image", value=1024)
@@ -102,8 +107,7 @@ def configure_sidebar() -> None:
                 output_quality = st.slider('Output quality (0-100, for jpg/webp)', value=80, min_value=0, max_value=100)
                 disable_safety_checker = st.checkbox("Disable safety checker", value=True)
 
-            prompt = st.text_area(":orange[**Enter prompt: Your idea goes here**]", value="An astronaut riding a rainbow unicorn, cinematic, dramatic")
-           
+            # Submit button at the bottom
             submitted = st.form_submit_button("Generate", type="primary", use_container_width=True)
 
         st.divider()
