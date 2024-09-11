@@ -1,4 +1,3 @@
-
 import replicate
 import streamlit as st
 import requests
@@ -18,43 +17,43 @@ st.markdown(
     <style>
     /* Set the background color */
     body {
-        background-color: #0D0D0D;
+        background-color: #0D0D0D !important;
     }
 
     /* Sidebar Styling */
     section[data-testid="stSidebar"] {
-        background-color: #1A1A1A;
+        background-color: #1A1A1A !important;
     }
 
-    /* Adjust font */
+    /* Adjust font and ensure it's loaded */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
     
     body, h1, h2, h3, h4, h5, h6, p, div {
-        font-family: 'Inter', sans-serif;
-        color: #E8E8E8;
+        font-family: 'Inter', sans-serif !important;
+        color: #E8E8E8 !important;
     }
 
     /* Customize text inputs, sliders, and buttons */
     input, .stButton button, .stSlider, .stNumberInput {
-        background-color: #1E1E1E;
-        color: #FFFFFF;
-        border-radius: 5px;
+        background-color: #1E1E1E !important;
+        color: #FFFFFF !important;
+        border-radius: 5px !important;
     }
 
     /* Customize button hover effects */
     .stButton button {
-        background-color: #7F38F2; /* Purple accent */
-        color: white;
+        background-color: #7F38F2 !important; /* Purple accent */
+        color: white !important;
     }
     
     .stButton button:hover {
-        background-color: #A64CF6; /* Lighter purple on hover */
+        background-color: #A64CF6 !important; /* Lighter purple on hover */
     }
 
     /* Additional styling for alerts or textboxes */
     .stAlert {
-        background-color: #292929;
-        color: #E8E8E8;
+        background-color: #292929 !important;
+        color: #E8E8E8 !important;
     }
     </style>
     """, unsafe_allow_html=True
@@ -78,7 +77,7 @@ def configure_sidebar() -> None:
             st.image("gallery/logo.png", use_column_width=True)
 
             # First, the prompt field
-            prompt = st.text_area(":orange[Prompt:]", value="Enter your idea here, our AI will handle the rest.")
+            prompt = st.text_area(":orange[**Enter prompt: Your idea goes here**]", value="An astronaut riding a rainbow unicorn, cinematic, dramatic")
 
             # Then the Advanced Settings
             with st.expander(":rainbow[**Advanced Settings**]"):
@@ -168,16 +167,4 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
                 "A robot bartender serving drinks to human and alien patrons in a sleek space station lounge, realistic.",
                 "A group of friends laughing and dancing at a music festival, joyful atmosphere, 35mm film photography",
                 "A wizard casting a spell, intense magical energy glowing from his hands",
-                "A women street skateboarding in Paris Olympics 2024",
-                "Anime style portrait of a female samurai at a beautiful lake with cherry trees, mountain fuji background, spring, sunset",
-                "A photorealistic close-up portrait of a bearded viking warrior in a horned helmet. He stares intensely into the distance while holding a battle axe. Dramatic mood lighting."
-            ],
-            use_container_width=True
-        )
-
-def main():
-    submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt = configure_sidebar()
-    main_page(submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt)
-
-if __name__ == "__main__":
-    main()
+                "A women street skateboarding in Paris Olympics 202
