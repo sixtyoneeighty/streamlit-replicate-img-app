@@ -97,8 +97,7 @@ def configure_sidebar() -> None:
             submitted = st.form_submit_button("Generate", type="primary", use_container_width=True)
 
         st.divider()
-        st.markdown(":orange[**Resources:**]  
-Replicate AI")
+        st.markdown(":orange[**Resources:**]  \nReplicate AI")
 
         return submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt
 
