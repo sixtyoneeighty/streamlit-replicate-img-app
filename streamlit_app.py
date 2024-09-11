@@ -1,4 +1,3 @@
-
 import replicate
 import streamlit as st
 import requests
@@ -6,6 +5,11 @@ import zipfile
 import io
 from utils import icon
 from streamlit_image_select import image_select
+
+# UI configurations (this must be at the very top)
+st.set_page_config(page_title="sixtyoneeighty Image AI",
+                   page_icon=":bridge_at_night:",
+                   layout="wide")
 
 # Custom CSS for the background and fonts
 st.markdown(
@@ -70,10 +74,6 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# UI configurations
-st.set_page_config(page_title="sixtyoneeighty Image AI",
-                   page_icon=":bridge_at_night:",
-                   layout="wide")
 icon.show_icon(":foggy:")
 st.markdown("# :rainbow[sixtyoneeighty Image AI]")
 
