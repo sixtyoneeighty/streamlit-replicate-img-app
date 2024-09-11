@@ -27,15 +27,42 @@ st.markdown(
         box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
     }
 
-    /* Custom font */
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
-    
+    /* Import the Epilogue font from Google Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Epilogue:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+    /* Apply Epilogue font globally */
     body, h1, h2, h3, h4, h5, h6, p, div {
-        font-family: 'Poppins', sans-serif !important;
-        color: #E8E8E8 !important;
+        font-family: 'Epilogue', sans-serif !important;
+        color: #E8E8E8 !important;  /* Adjust text color as needed */
+    }
+
+    /* Example: Customize specific text elements */
+    h1 {
+        font-family: 'Epilogue', sans-serif;
+        color: #7F38F2 !important;  /* Optional: Customize header color */
     }
 
     /* Customize buttons */
+    .stButton button {
+        background-color: #7F38F2 !important;
+        color: white !important;
+        border-radius: 8px !important;
+        padding: 0.5em 1.5em !important;
+    }
+
+    .stButton button:hover {
+        background-color: #A64CF6 !important; /* Lighter purple on hover */
+    }
+
+    /* Add gradient text */
+    h1 {
+        background: linear-gradient(90deg, #ff7e5f, #feb47b);  /* Gradient from white to orange */
+        -webkit-background-clip: text;
+        color: transparent;
+    }
+   
+)
+        /* Customize buttons */
     .stButton button {
         background-color: #7F38F2 !important;
         color: white !important;
