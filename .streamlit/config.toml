@@ -1,17 +1,8 @@
+# .streamlit/config.toml
+
 [theme]
 primaryColor = "#7F38F2"  # Purple accent color
-backgroundColor = "#0D0D0D"  # Dark background color
+backgroundColor = "#0D0D0D"  # Dark background
 secondaryBackgroundColor = "#1A1A1A"  # Sidebar background color
 textColor = "#E8E8E8"  # Text color
-font = "sans serif"
-
-# Custom page title and layout
-[server]
-headless = true
-
-[ui]
-pageTitle = "sixtyoneeighty Image AI"
-# Removing the icon by setting pageIcon to an empty string
-pageIcon = ""
-
-layout = "wide"  # This ensures the wide layout is used
+font = "sans serif"  # Font family

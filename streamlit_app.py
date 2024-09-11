@@ -6,59 +6,60 @@ import io
 from utils import icon
 from streamlit_image_select import image_select
 
-# UI configurations (removing the page_icon argument)
+# Apply page layout settings from config.toml (no need to set page_icon here)
 st.set_page_config(page_title="sixtyoneeighty Image AI", layout="wide")
 
-# Custom CSS for the background and fonts
+# Custom CSS for additional styling
 st.markdown(
     """
     <style>
-    /* Set the background color */
+    /* Set background color */
     body {
         background-color: #0D0D0D !important;
     }
 
-    /* Sidebar Styling */
+    /* Sidebar styling */
     section[data-testid="stSidebar"] {
         background-color: #1A1A1A !important;
     }
 
-    /* Adjust font and ensure it's loaded */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+    /* Add box shadows for sidebar */
+    section[data-testid="stSidebar"] {
+        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Custom font */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
     
     body, h1, h2, h3, h4, h5, h6, p, div {
-        font-family: 'Inter', sans-serif !important;
+        font-family: 'Poppins', sans-serif !important;
         color: #E8E8E8 !important;
     }
 
-    /* Customize text inputs, sliders, and buttons */
-    input, .stButton button, .stSlider, .stNumberInput {
-        background-color: #1E1E1E !important;
-        color: #FFFFFF !important;
-        border-radius: 5px !important;
-    }
-
-    /* Customize button hover effects */
+    /* Customize buttons */
     .stButton button {
-        background-color: #7F38F2 !important; /* Purple accent */
+        background-color: #7F38F2 !important;
         color: white !important;
+        border-radius: 8px !important;
+        padding: 0.5em 1.5em !important;
     }
     
     .stButton button:hover {
         background-color: #A64CF6 !important; /* Lighter purple on hover */
     }
 
-    /* Additional styling for alerts or textboxes */
-    .stAlert {
-        background-color: #292929 !important;
-        color: #E8E8E8 !important;
+    /* Add gradient text */
+    h1 {
+        background: linear-gradient(90deg, #ff7e5f, #feb47b);  /* Gradient from peach to orange */
+        -webkit-background-clip: text;
+        color: transparent;
     }
     </style>
     """, unsafe_allow_html=True
 )
 
 icon.show_icon(":foggy:")
-st.markdown("# :rainbow[sixtyoneeighty Image AI]")
+st.markdown("# sixtyoneeighty Image AI")
 
 # API Tokens and endpoints from `.streamlit/secrets.toml` file
 REPLICATE_API_TOKEN = st.secrets["REPLICATE_API_TOKEN"]
@@ -75,10 +76,10 @@ def configure_sidebar() -> None:
             st.image("gallery/logo.png", use_column_width=True)
 
             # First, the prompt field
-            prompt = st.text_area(":orange[**Enter prompt: Your idea goes here**]", value="An astronaut riding a rainbow unicorn, cinematic, dramatic")
+            prompt = st.text_area(":orange[Prompt:]", value="Your idea goes here. Our AI will then enhance, optimize and then generate your image")
 
             # Then the Advanced Settings
-            with st.expander(":rainbow[**Advanced Settings**]"):
+            with st.expander("[**Advanced Settings**]"):
                 # Advanced Settings for Flux-Dev
                 width = st.number_input("Width of output image", value=1024)
                 height = st.number_input("Height of output image", value=1024)
@@ -174,7 +175,4 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
 
 def main():
     submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt = configure_sidebar()
-    main_page(submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt)
-
-if __name__ == "__main__":
-    main()
+    main_page(submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format,
