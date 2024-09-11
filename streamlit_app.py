@@ -105,7 +105,7 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
             label="Like what you see? Right-click and save! It's not stealing if we're sharing! 😉",
             images=[
                 "gallery/futurecity.webp", "gallery/robot.webp",
-                "gallery/fest.webp", "gallery/wizard.webp",
+                "gallery/fest.webp", "gallery/wizard.png",
                 "gallery/skateboard.webp",
                 "gallery/anime.jpg", "gallery/viking.png",
             ],
