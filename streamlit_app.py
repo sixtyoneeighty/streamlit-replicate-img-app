@@ -3,7 +3,6 @@ import streamlit as st
 import requests
 import zipfile
 import io
-from utils import icon
 from streamlit_image_select import image_select
 
 # Apply page layout settings from config.toml (no need to set page_icon here)
@@ -58,7 +57,6 @@ st.markdown(
     """, unsafe_allow_html=True
 )
 
-icon.show_icon(":foggy:")
 st.markdown("# sixtyoneeighty Image AI")
 
 # API Tokens and endpoints from `.streamlit/secrets.toml` file
