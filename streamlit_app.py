@@ -92,7 +92,7 @@ def configure_sidebar() -> None:
             st.image("gallery/logo.png", use_column_width=True)
 
             # First, the prompt field
-            prompt = st.text_area(":orange[**Enter prompt: Your idea goes here**]", value="An astronaut riding a rainbow unicorn, cinematic, dramatic")
+            prompt = st.text_area(":orange[Prompt]", value="Enter your idea here in natural language, our AI will take care of the rest")
 
             # Then the Advanced Settings
             with st.expander(":rainbow[**Advanced Settings**]"):
