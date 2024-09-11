@@ -79,7 +79,7 @@ def configure_sidebar() -> None:
             prompt = st.text_area(":orange[Prompt:]", value="Your idea goes here. Our AI will then enhance, optimize and then generate your image")
 
             # Then the Advanced Settings
-            with st.expander("[**Advanced Settings**]"):
+            with st.expander("**Advanced Settings**"):
                 # Advanced Settings for Flux-Dev
                 width = st.number_input("Width of output image", value=1024)
                 height = st.number_input("Height of output image", value=1024)
@@ -171,7 +171,7 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
                 "A photorealistic close-up portrait of a bearded viking warrior in a horned helmet. He stares intensely into the distance while holding a battle axe. Dramatic mood lighting."
             ],
             use_container_width=True
-            
+
         )
 def main():
     submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt = configure_sidebar()
