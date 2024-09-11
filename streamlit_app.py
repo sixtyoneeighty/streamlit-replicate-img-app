@@ -44,11 +44,12 @@ def configure_sidebar() -> None:
         st.divider()
         st.markdown(":orange[**Resources:**]  \nReplicate AI")
 
-        return submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt, negative_prompt
+        return submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt
 
-def main_page(submitted: bool, width: int, height: int, num_outputs: int, guidance_scale: float, num_inference_steps: int,
-              aspect_ratio: str, output_format: str, output_quality: int, disable_safety_checker: bool,
-              prompt: str, negative_prompt: str) -> None:
+def main_page(submitted: bool, width: int, height: int, num_outputs: int,
+              guidance_scale: float, num_inference_steps: int,
+              aspect_ratio: str, output_format: str, output_quality: int,
+              disable_safety_checker: bool, prompt: str) -> None:
     if submitted:
         with st.status('👩🏾‍🍳 Whipping up your words into art...', expanded=True):
             st.write("⚙️ Model initiated")
