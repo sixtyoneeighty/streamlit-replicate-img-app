@@ -24,7 +24,8 @@ gallery_placeholder = st.empty()
 def configure_sidebar() -> None:
     with st.sidebar:
         with st.form("my_form"):
-            st.info("**sixtyoneeighty Image AI", icon="👋🏾")
+            # Display logo.png instead of text
+            st.image("gallery/logo.png", use_column_width=True)
             with st.expander(":rainbow[**Advanced Settings**]"):
                 # Advanced Settings for Flux-Dev
                 width = st.number_input("Width of output image", value=1024)
