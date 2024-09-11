@@ -1,3 +1,4 @@
+
 import replicate
 import streamlit as st
 import requests
@@ -5,6 +6,69 @@ import zipfile
 import io
 from utils import icon
 from streamlit_image_select import image_select
+
+# Custom CSS for the background and fonts
+st.markdown(
+    """
+    <style>
+    /* Set the background color */
+    body {
+        background-color: #0D0D0D;
+    }
+
+    /* Set the font style and import Google Font (or use a system font) */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+    
+    body, h1, h2, h3, h4, h5, h6, p, div {
+        font-family: 'Inter', sans-serif;
+        color: #E8E8E8;
+    }
+
+    /* Customize the headings */
+    h1, h2, h3, h4, h5, h6 {
+        color: #FFFFFF;
+    }
+
+    /* Customize text inputs, sliders, and buttons to have matching accent colors */
+    .stTextInput, .stNumberInput, .stSlider, .stButton {
+        background-color: #1E1E1E;
+        color: #FFFFFF;
+        border-radius: 5px;
+    }
+
+    /* Customize button hover effects */
+    .stButton button {
+        background-color: #7F38F2; /* Purple accent */
+        color: white;
+    }
+    
+    .stButton button:hover {
+        background-color: #A64CF6; /* Lighter purple on hover */
+    }
+
+    /* Customize the sidebar with your dark theme and accent colors */
+    .sidebar .sidebar-content {
+        background-color: #1A1A1A;
+    }
+
+    .sidebar .sidebar-content h1, h2, h3, h4, h5, h6 {
+        color: #FFFFFF;
+    }
+
+    /* Set the accent color for links and interactive elements */
+    a {
+        color: #7F38F2;
+    }
+
+    /* Additional styling for other elements */
+    .stAlert {
+        background-color: #292929;
+        color: #E8E8E8;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 # UI configurations
 st.set_page_config(page_title="sixtyoneeighty Image AI",
@@ -40,10 +104,11 @@ def configure_sidebar() -> None:
 
             prompt = st.text_area(":orange[**Enter prompt: Your idea goes here**]", value="An astronaut riding a rainbow unicorn, cinematic, dramatic")
            
-            submitted = st.form_submit_button("Submit", type="primary", use_container_width=True)
+            submitted = st.form_submit_button("Generate", type="primary", use_container_width=True)
 
         st.divider()
-        st.markdown(":orange[**Resources:**]  \nReplicate AI")
+        st.markdown(":orange[**Resources:**]  
+Replicate AI")
 
         return submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt
 
@@ -52,8 +117,8 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
               aspect_ratio: str, output_format: str, output_quality: int,
               disable_safety_checker: bool, prompt: str) -> None:
     if submitted:
-        with st.status('👩🏾‍🍳 Whipping up your words into art...', expanded=True):
-            st.write("⚙️ Model initiated")
+        with st.status('Generating..', expanded=True):
+            st.write("AI initiated")
             try:
                 if submitted:
                     with generated_images_placeholder.container():
@@ -102,7 +167,7 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
 
     with gallery_placeholder.container():
         img = image_select(
-            label="Like what you see? Right-click and save! It's not stealing if we're sharing! 😉",
+            label="Want to save an image? Right-click and save!",
             images=[
                 "gallery/futurecity.webp", "gallery/robot.webp",
                 "gallery/fest.webp", "gallery/wizard.png",
