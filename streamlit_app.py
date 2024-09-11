@@ -1,3 +1,4 @@
+
 import replicate
 import streamlit as st
 import requests
@@ -20,7 +21,12 @@ st.markdown(
         background-color: #0D0D0D;
     }
 
-    /* Set the font style and import Google Font (or use a system font) */
+    /* Sidebar Styling */
+    section[data-testid="stSidebar"] {
+        background-color: #1A1A1A;
+    }
+
+    /* Adjust font */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
     
     body, h1, h2, h3, h4, h5, h6, p, div {
@@ -28,13 +34,8 @@ st.markdown(
         color: #E8E8E8;
     }
 
-    /* Customize the headings */
-    h1, h2, h3, h4, h5, h6 {
-        color: #FFFFFF;
-    }
-
-    /* Customize text inputs, sliders, and buttons to have matching accent colors */
-    .stTextInput, .stNumberInput, .stSlider, .stButton {
+    /* Customize text inputs, sliders, and buttons */
+    input, .stButton button, .stSlider, .stNumberInput {
         background-color: #1E1E1E;
         color: #FFFFFF;
         border-radius: 5px;
@@ -50,28 +51,13 @@ st.markdown(
         background-color: #A64CF6; /* Lighter purple on hover */
     }
 
-    /* Customize the sidebar with your dark theme and accent colors */
-    .sidebar .sidebar-content {
-        background-color: #1A1A1A;
-    }
-
-    .sidebar .sidebar-content h1, h2, h3, h4, h5, h6 {
-        color: #FFFFFF;
-    }
-
-    /* Set the accent color for links and interactive elements */
-    a {
-        color: #7F38F2;
-    }
-
-    /* Additional styling for other elements */
+    /* Additional styling for alerts or textboxes */
     .stAlert {
         background-color: #292929;
         color: #E8E8E8;
     }
     </style>
-    """,
-    unsafe_allow_html=True
+    """, unsafe_allow_html=True
 )
 
 icon.show_icon(":foggy:")
@@ -92,7 +78,7 @@ def configure_sidebar() -> None:
             st.image("gallery/logo.png", use_column_width=True)
 
             # First, the prompt field
-            prompt = st.text_area(":orange[Prompt]", value="Enter your idea here in natural language, our AI will take care of the rest")
+            prompt = st.text_area(":orange[**Enter prompt: Your idea goes here**]", value="An astronaut riding a rainbow unicorn, cinematic, dramatic")
 
             # Then the Advanced Settings
             with st.expander(":rainbow[**Advanced Settings**]"):
@@ -111,7 +97,8 @@ def configure_sidebar() -> None:
             submitted = st.form_submit_button("Generate", type="primary", use_container_width=True)
 
         st.divider()
-        st.markdown(":orange[**Resources:**]  \nReplicate AI")
+        st.markdown(":orange[**Resources:**]  
+Replicate AI")
 
         return submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt
 
