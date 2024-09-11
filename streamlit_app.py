@@ -6,10 +6,8 @@ import io
 from utils import icon
 from streamlit_image_select import image_select
 
-# UI configurations (must be at the very top, before any other Streamlit commands)
-st.set_page_config(page_title="sixtyoneeighty Image AI",
-                   page_icon=":bridge_at_night:",
-                   layout="wide")
+# UI configurations (removing the page_icon argument)
+st.set_page_config(page_title="sixtyoneeighty Image AI", layout="wide")
 
 # Custom CSS for the background and fonts
 st.markdown(
