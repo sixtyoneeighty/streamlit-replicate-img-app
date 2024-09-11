@@ -49,7 +49,7 @@ st.markdown(
 
     /* Add gradient text */
     h1 {
-        background: linear-gradient(90deg, #ff7e5f, #feb47b);  /* Gradient from peach to orange */
+        background: linear-gradient(90deg, #ff7e5f, #feb47b);  /* Gradient from white to orange */
         -webkit-background-clip: text;
         color: transparent;
     }
@@ -57,7 +57,7 @@ st.markdown(
     """, unsafe_allow_html=True
 )
 
-st.markdown("# sixtyoneeighty Image AI")
+st.markdown("sixtyoneeighty Image AI")
 
 # API Tokens and endpoints from `.streamlit/secrets.toml` file
 REPLICATE_API_TOKEN = st.secrets["REPLICATE_API_TOKEN"]
