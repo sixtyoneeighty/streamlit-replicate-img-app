@@ -227,9 +227,6 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
                     
                     # Log the enhanced prompt to the console for debugging
                     print(f"Enhanced Prompt for Debugging: {cleaned_prompt}")
-                    
-                    # Display the enhanced prompt in a cleaner format
-                    st.markdown(f"### Your new enhanced prompt: **{cleaned_prompt}**")
                 else:
                     # If skip enhancement is enabled, use the original topic as the prompt
                     cleaned_prompt = topic  # Keep as a string
@@ -238,7 +235,11 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
                 output = generate_image(cleaned_prompt, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker)
                 
                 if output:
+                    # Display the generated image first
                     st.image(output[0], use_column_width=False, width=400)
+                    
+                    # Then display the enhanced prompt underneath the image
+                    st.markdown(f"### Your new enhanced prompt: **{cleaned_prompt}**")
                 else:
                     st.error("Failed to generate image.")
 
@@ -265,6 +266,7 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
                     "A photorealistic close-up portrait of a bearded viking warrior in a horned helmet. He stares intensely into the distance while holding a battle axe. Dramatic mood lighting."
                 ],
                 use_container_width=True
+            
             )
 
 def main():
