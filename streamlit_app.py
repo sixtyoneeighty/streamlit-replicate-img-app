@@ -9,7 +9,7 @@ from streamlit_image_select import image_select
 # Set up page layout
 st.set_page_config(page_title="sixtyoneeighty Image AI", layout="wide")
 
-# Custom CSS for sidebar and gallery styling
+# Custom CSS for sidebar and gallery styling (minimal for now)
 st.markdown(
     """
     <style>
@@ -24,11 +24,6 @@ st.markdown(
         padding: 10px;
     }
 
-    /* Add box shadows for sidebar */
-    section[data-testid="stSidebar"] {
-        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
-    }
-
     /* Import the Epilogue font from Google Fonts */
     @import url('https://fonts.googleapis.com/css2?family=Epilogue:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
@@ -38,33 +33,7 @@ st.markdown(
         color: #E8E8E8 !important;
     }
 
-    /* Customize buttons */
-    .stButton button {
-        background-color: #7F38F2 !important;
-        color: white !important;
-        border-radius: 8px !important;
-        padding: 0.5em 1.5em !important;
-    }
-
-    .stButton button:hover {
-        background-color: #A64CF6 !important;
-    }
-
-    /* Flexbox for gallery to make images evenly spaced */
-    .gallery-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        gap: 20px;
-    }
-
-    /* Style for individual gallery items */
-    .gallery-item {
-        flex: 1 1 calc(33% - 20px);
-        box-sizing: border-box;
-        margin-bottom: 20px;
-    }
-
+    /* Minimal styling for now */
     img {
         width: 100%;
         height: auto;
@@ -103,42 +72,14 @@ def configure_sidebar() -> None:
         return submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt
 
 
-# Display images in gallery
-st.markdown('<div class="gallery-container">', unsafe_allow_html=True)
-
-st.markdown('''
-<div class="gallery-item">
-    <img src="static/futurecity.webp" alt="Futuristic city" />
-    <p>A futuristic city skyline at sunset, with flying cars and glowing holograms, ultra-realistic</p>
-</div>
-<div class="gallery-item">
-    <img src="static/robot.webp" alt="Robot bartender" />
-    <p>A robot bartender serving drinks to human and alien patrons in a sleek space station lounge, realistic.</p>
-</div>
-<div class="gallery-item">
-    <img src="static/fest.webp" alt="Music festival" />
-    <p>A group of friends laughing and dancing at a music festival, joyful atmosphere, 35mm film photography</p>
-</div>
-<div class="gallery-item">
-    <img src="static/wizard.png" alt="Wizard casting spell" />
-    <p>A wizard casting a spell, intense magical energy glowing from his hands</p>
-</div>
-<div class="gallery-item">
-    <img src="static/skateboard.webp" alt="Street skateboarding" />
-    <p>A woman street skateboarding in Paris Olympics 2024</p>
-</div>
-<div class="gallery-item">
-    <img src="static/anime.jpg" alt="Anime samurai" />
-    <p>Anime style portrait of a female samurai at a beautiful lake with cherry trees, mountain fuji background, spring, sunset</p>
-</div>
-<div class="gallery-item">
-    <img src="static/viking.png" alt="Viking portrait" />
-    <p>A photorealistic close-up portrait of a bearded viking warrior in a horned helmet. He stares intensely into the distance while holding a battle axe. Dramatic mood lighting.</p>
-</div>
-''', unsafe_allow_html=True)
-
-st.markdown('</div>', unsafe_allow_html=True)
-
+# Display images using st.image() directly to ensure they load
+st.image("static/futurecity.webp", caption="A futuristic city skyline at sunset, with flying cars and glowing holograms, ultra-realistic")
+st.image("static/robot.webp", caption="A robot bartender serving drinks to human and alien patrons in a sleek space station lounge, realistic.")
+st.image("static/fest.webp", caption="A group of friends laughing and dancing at a music festival, joyful atmosphere, 35mm film photography")
+st.image("static/wizard.png", caption="A wizard casting a spell, intense magical energy glowing from his hands")
+st.image("static/skateboard.webp", caption="A woman street skateboarding in Paris Olympics 2024")
+st.image("static/anime.jpg", caption="Anime style portrait of a female samurai at a beautiful lake with cherry trees, mountain fuji background, spring, sunset")
+st.image("static/viking.png", caption="A photorealistic close-up portrait of a bearded viking warrior in a horned helmet. He stares intensely into the distance while holding a battle axe. Dramatic mood lighting.")
 
 def main():
     submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt = configure_sidebar()
