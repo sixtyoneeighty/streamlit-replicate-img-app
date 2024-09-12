@@ -48,32 +48,10 @@ st.markdown(
         background-color: #A64CF6 !important; /* Lighter purple on hover */
     }
 
-    /* Add gradient text */
-    h1 {
-        background: linear-gradient(90deg, #ff7e5f, #feb47b);  /* Gradient from white to orange */
-        -webkit-background-clip: text;
-        color: transparent;
-    }
-
-    /* Flexbox for gallery to make images evenly spaced */
-    .gallery-container {
+    /* Flexbox to align Generate and Clear buttons */
+    .button-container {
         display: flex;
-        flex-wrap: wrap;
         justify-content: space-between;
-        gap: 20px; /* Add some space between items */
-    }
-
-    /* Style for individual gallery items */
-    .gallery-item {
-        flex: 1 1 calc(33% - 20px);  /* Make each image take up 1/3 of the row */
-        box-sizing: border-box;
-        margin-bottom: 20px;  /* Add spacing below the images */
-    }
-
-    img {
-        width: 100%;
-        height: auto;
-        border-radius: 10px;  /* Optional: Add rounded corners */
     }
     </style>
     """, unsafe_allow_html=True
@@ -116,13 +94,16 @@ def configure_sidebar() -> None:
                 output_quality = st.slider('Output quality (0-100, for jpg/webp)', value=80, min_value=0, max_value=100)
                 disable_safety_checker = st.checkbox("Disable safety checker", value=True)
 
-            # Submit button at the bottom
+            # Container to align the buttons in one row
+            st.markdown('<div class="button-container">', unsafe_allow_html=True)
+            
+            # Submit and Clear buttons
             submitted = st.form_submit_button("Generate", type="primary", use_container_width=True)
+            if st.form_submit_button("Clear Prompt"):
+                st.session_state["prompt"] = ""
+                st.experimental_rerun()
 
-        # Clear button below the form
-        if st.button("Clear Prompt"):
-            st.session_state["prompt"] = ""
-            st.experimental_rerun()
+            st.markdown('</div>', unsafe_allow_html=True)
 
         st.divider()
         st.markdown(":orange[**Resources:**]  \nReplicate AI")
