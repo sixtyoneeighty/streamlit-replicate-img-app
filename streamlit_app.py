@@ -217,17 +217,20 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
                     # Enhance the prompt using Gemini and magic_prompt logic
                     enhanced_prompt = get_enhanced_prompt(topic)
                     
+                    # Extract the actual enhanced prompt text (assuming it's in the 'prompt' field)
+                    cleaned_prompt = enhanced_prompt.get("prompt", enhanced_prompt)
+                    
                     # Log the enhanced prompt to the console for debugging
-                    print(f"Enhanced Prompt for Debugging: {enhanced_prompt}")
+                    print(f"Enhanced Prompt for Debugging: {cleaned_prompt}")
                     
                     # Display the enhanced prompt in a cleaner format
-                    st.markdown(f"### Your new enhanced prompt: {enhanced_prompt}")
+                    st.markdown(f"### Your new enhanced prompt: **{cleaned_prompt}**")
                 else:
                     # If skip enhancement is enabled, use the original topic as the prompt
-                    enhanced_prompt = topic  # Keep as a string
+                    cleaned_prompt = topic  # Keep as a string
 
                 # Generate the image
-                output = generate_image(enhanced_prompt, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker)
+                output = generate_image(cleaned_prompt, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker)
                 
                 if output:
                     st.image(output[0], use_column_width=False, width=400)
@@ -257,9 +260,7 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
                     "A photorealistic close-up portrait of a bearded viking warrior in a horned helmet. He stares intensely into the distance while holding a battle axe. Dramatic mood lighting."
                 ],
                 use_container_width=True
-            
             )
-
 
 def main():
     submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt, skip_enhancement = configure_sidebar()
