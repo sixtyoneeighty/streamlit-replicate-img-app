@@ -86,8 +86,8 @@ def configure_sidebar() -> None:
             # Then the Advanced Settings
             with st.expander("**Advanced Settings**"):
                 # Advanced Settings for Flux-Dev
-                width = st.number_input("Width of output image", value=1024)
-                height = st.number_input("Height of output image", value=1024)
+                width = st.number_input("Width of output image", value=512)
+                height = st.number_input("Height of output image", value=512)
                 num_outputs = st.slider("Number of images to output", value=1, min_value=1, max_value=2)
                 guidance_scale = st.slider("Guidance scale (0 to 10)", value=3.5, min_value=0.0, max_value=10.0, step=0.1)
                 num_inference_steps = st.slider("Number of denoising steps", value=28, min_value=1, max_value=50)
@@ -100,8 +100,8 @@ def configure_sidebar() -> None:
             st.markdown('<div class="button-container">', unsafe_allow_html=True)
             
             # Submit and Clear buttons side by side
-            submitted = st.form_submit_button("Generate", type="primary")
-            if st.form_submit_button("Clear Prompt"):
+            submitted = st.form_submit_button("Generate Image", type="primary")
+            if st.form_submit_button("Clear"):
                 st.session_state["prompt"] = ""
                 st.experimental_rerun()
 
