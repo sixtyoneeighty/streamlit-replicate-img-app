@@ -238,8 +238,14 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
                     # Display the generated image first
                     st.image(output[0], use_column_width=False, width=400)
                     
-                    # Then display the enhanced prompt underneath the image
-                    st.markdown(f"### Your new enhanced prompt: **{cleaned_prompt}**")
+                    # Then display the enhanced prompt underneath the image with smaller font and purple text
+                    st.markdown(
+                        f"""
+                        <p style="font-size:14px; color:purple;">
+                        <strong>Your new enhanced prompt:</strong> {cleaned_prompt}
+                        </p>
+                        """, unsafe_allow_html=True
+                    )
                 else:
                     st.error("Failed to generate image.")
 
@@ -266,8 +272,8 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
                     "A photorealistic close-up portrait of a bearded viking warrior in a horned helmet. He stares intensely into the distance while holding a battle axe. Dramatic mood lighting."
                 ],
                 use_container_width=True
-            
             )
+            
 
 def main():
     submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt, skip_enhancement = configure_sidebar()
