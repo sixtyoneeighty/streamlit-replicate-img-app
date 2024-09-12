@@ -78,7 +78,7 @@ st.markdown(
 def configure_sidebar() -> None:
     with st.sidebar:
         with st.form("my_form"):
-            st.image("gallery/logo.png", use_column_width=True)
+            st.image("static/logo.png", use_column_width=True)
 
             # Prompt input field
             prompt = st.text_area("Prompt:", value="Your idea goes here. Our AI will then enhance, optimize, and generate your image.")
