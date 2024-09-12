@@ -10,7 +10,7 @@ genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 # Configure page layout
 st.set_page_config(page_title="sixtyoneeighty Image AI", layout="wide")
 
-# Custom CSS for additional styling, including background image
+# Custom CSS for additional styling, including background image and header bar
 st.markdown(
     """
     <style>
@@ -21,6 +21,11 @@ st.markdown(
         background-repeat: no-repeat;
         background-attachment: fixed;
         background-position: center;
+    }
+
+    /* Header or Toolbar bar styling (if applicable) */
+    header {
+        background-color: #7F38F2 !important; /* Set to purple */
     }
 
     /* Sidebar styling */
@@ -59,8 +64,9 @@ st.markdown(
     }
 
     .stButton button:hover {
-        background-color: #A64CF6 !important;
+        background-color: #A64CF6 !important; /* Lighter purple on hover */
     }
+
     </style>
     """, unsafe_allow_html=True
 )
@@ -86,7 +92,7 @@ def magic_prompt(topic: str) -> list:
     
     system_message = {
         "role": "system",
-        "content": "You are an expert AI assistant, specializing in photography and prompt enhancement. You will dive deep into the user's ideas, extracting the essence of their vision. Then, weave those concepts into a tapestry of descriptive language, painting a vivid scene or concept for the AI to render. Be bold, creative, and detail-oriented, ensuring every prompt is a masterpiece waiting to be realized."
+        "content": "You are an expert AI assistant, specializing in photography and prompt enhancement..."
     }
 
     user_message = {
@@ -102,10 +108,7 @@ Your prompt should include the following elements if applicable:
 4. Specific actions or poses for characters
 5. Important objects or elements to include
 6. Overall mood or emotion to convey
-7. Type of camera and lens used, if relevant
-
-Follow this format: Main character or Main subject:..., Background:..., Lighting:..., Color scheme:..., Atmosphere:..., Actions:..., Objects:..., Camera:..., Lens:...
-"""
+7. Type of camera and lens used, if relevant"""
     }
 
     return [system_message, user_message]
@@ -123,10 +126,8 @@ Your prompt should include the following elements if applicable:
 4. Lighting: The type and quality of light in the scene.
 5. Mood/Atmosphere: The emotional tone or ambiance of the image.
 6. Technical Details: Camera settings, perspective, or specific visual techniques.
-7. Additional Elements: Background, poses, actions, other objects in photo, things that bring the image to life
-
-The prompt should be a concise single line that an image generation AI can interpret directly."""
-
+7. Additional Elements: Background, poses, actions, other objects in the photo."""
+    
     model = genai.GenerativeModel(
         model_name="gemini-1.5-pro-exp-0827",
         generation_config={
@@ -134,11 +135,8 @@ The prompt should be a concise single line that an image generation AI can inter
             "top_p": 0.95,
             "top_k": 64,
             "max_output_tokens": 8192,
-            "response_mime_type": "application/json",
-        },
-        system_instruction="You are an AI assistant specializing in crafting evocative and detailed prompts for image generation..."
+        }
     )
-
     chat_session = model.start_chat(history=[])
     response = chat_session.send_message(prompt_text)
     return response.text
