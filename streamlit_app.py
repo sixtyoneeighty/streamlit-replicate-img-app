@@ -89,21 +89,25 @@ REPLICATE_MODEL_ENDPOINT = "black-forest-labs/flux-dev"  # Updated to Flux-Dev m
 generated_images_placeholder = st.empty()
 gallery_placeholder = st.empty()
 
+# Global state to manage prompt text
+if "prompt" not in st.session_state:
+    st.session_state["prompt"] = ""
+
 def configure_sidebar() -> None:
     with st.sidebar:
         with st.form("my_form"):
             # Display logo.png instead of text
             st.image("gallery/logo.png", use_column_width=True)
 
-            # First, the prompt field
-            prompt = st.text_area("Prompt:", 
+            # First, the prompt field with session state
+            prompt = st.text_area("Prompt:", value=st.session_state["prompt"],
                       placeholder="Enter your idea here. Our AI will then enhance, optimize, and generate your image.")
 
             # Then the Advanced Settings
             with st.expander("**Advanced Settings**"):
                 # Advanced Settings for Flux-Dev
-                width = st.number_input("Width of output image", value=512)
-                height = st.number_input("Height of output image", value=512)
+                width = st.number_input("Width of output image", value=1024)
+                height = st.number_input("Height of output image", value=1024)
                 num_outputs = st.slider("Number of images to output", value=1, min_value=1, max_value=2)
                 guidance_scale = st.slider("Guidance scale (0 to 10)", value=3.5, min_value=0.0, max_value=10.0, step=0.1)
                 num_inference_steps = st.slider("Number of denoising steps", value=28, min_value=1, max_value=50)
@@ -114,6 +118,11 @@ def configure_sidebar() -> None:
 
             # Submit button at the bottom
             submitted = st.form_submit_button("Generate", type="primary", use_container_width=True)
+
+        # Clear button below the form
+        if st.button("Clear Prompt"):
+            st.session_state["prompt"] = ""
+            st.experimental_rerun()
 
         st.divider()
         st.markdown(":orange[**Resources:**]  \nReplicate AI")
@@ -128,7 +137,7 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
         # Hide gallery once the image is generated
         gallery_placeholder.empty()
         with st.status('Generating...', expanded=True):
-            
+            st.write("AI initiated")
             try:
                 # Only show the generated image
                 output = replicate.run(
@@ -148,8 +157,8 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
                 if output:
                     st.session_state.generated_image = output
 
-                    # Show the generated image only
-                    st.image(st.session_state.generated_image[0], use_column_width=True)
+                    # Show the generated image, scaled down by setting the width
+                    st.image(st.session_state.generated_image[0], caption="Generated Image", use_column_width=False, width=400)
 
             except Exception as e:
                 print(e)
