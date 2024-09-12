@@ -81,10 +81,10 @@ def configure_sidebar() -> None:
             st.image("gallery/logo.png", use_column_width=True)
 
             # Prompt input field
-            prompt = st.text_area(":orange[**Enter prompt: Your idea goes here**]", value="An astronaut riding a rainbow unicorn, cinematic, dramatic")
+            prompt = st.text_area("Prompt:", value="Your idea goes here. Our AI will then enhance, optimize, and generate your image.")
 
             # Advanced Settings in the sidebar
-            with st.expander(":rainbow[**Advanced Settings**]"):
+            with st.expander("Advanced Settings"):
                 width = st.number_input("Width of output image", value=1024)
                 height = st.number_input("Height of output image", value=1024)
                 num_outputs = st.slider("Number of images to output", value=1, min_value=1, max_value=2)
