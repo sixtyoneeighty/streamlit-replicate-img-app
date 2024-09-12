@@ -217,8 +217,13 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
                     # Enhance the prompt using Gemini and magic_prompt logic
                     enhanced_prompt = get_enhanced_prompt(topic)
                     
-                    # Extract the actual enhanced prompt text (assuming it's in the 'prompt' field)
-                    cleaned_prompt = enhanced_prompt.get("prompt", enhanced_prompt)
+                    # Check if enhanced_prompt is a dictionary or a string
+                    if isinstance(enhanced_prompt, dict):
+                        # Extract the prompt from the dictionary
+                        cleaned_prompt = enhanced_prompt.get("prompt", "")
+                    else:
+                        # If it's already a string, use it directly
+                        cleaned_prompt = enhanced_prompt
                     
                     # Log the enhanced prompt to the console for debugging
                     print(f"Enhanced Prompt for Debugging: {cleaned_prompt}")
