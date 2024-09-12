@@ -221,7 +221,7 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
                     print(f"Enhanced Prompt for Debugging: {enhanced_prompt}")
                     
                     # Display the enhanced prompt in a cleaner format
-                    st.markdown(f"### Your new enhanced prompt: **{enhanced_prompt}**")
+                    st.markdown(f"### Your new enhanced prompt: {enhanced_prompt}")
                 else:
                     # If skip enhancement is enabled, use the original topic as the prompt
                     enhanced_prompt = topic  # Keep as a string
