@@ -3,7 +3,6 @@ import streamlit as st
 import requests
 import zipfile
 import io
-from utils import icon
 from streamlit_image_select import image_select
 
 # Apply page layout settings from config.toml (no need to set page_icon here)
@@ -80,45 +79,15 @@ st.markdown(
     """, unsafe_allow_html=True
 )
 
-st.markdown("# sixtyoneeighty Image AI")
+st.markdown("# sixtyoneeighty")
 
-# Placeholders for images and gallery with Flexbox styling
-st.markdown('<div class="gallery-container">', unsafe_allow_html=True)
+# API Tokens and endpoints from `.streamlit/secrets.toml` file
+REPLICATE_API_TOKEN = st.secrets["REPLICATE_API_TOKEN"]
+REPLICATE_MODEL_ENDPOINT = "black-forest-labs/flux-dev"  # Updated to Flux-Dev model
 
-# Add each image inside a container
-st.markdown('''
-<div class="gallery-item">
-    <img src="gallery/futurecity.webp" alt="Futuristic city" />
-    <p>A futuristic city skyline at sunset, with flying cars and glowing holograms, ultra-realistic</p>
-</div>
-<div class="gallery-item">
-    <img src="gallery/robot.webp" alt="Robot bartender" />
-    <p>A robot bartender serving drinks to human and alien patrons in a sleek space station lounge, realistic.</p>
-</div>
-<div class="gallery-item">
-    <img src="gallery/fest.webp" alt="Music festival" />
-    <p>A group of friends laughing and dancing at a music festival, joyful atmosphere, 35mm film photography</p>
-</div>
-<div class="gallery-item">
-    <img src="gallery/wizard.png" alt="Wizard casting spell" />
-    <p>A wizard casting a spell, intense magical energy glowing from his hands</p>
-</div>
-<div class="gallery-item">
-    <img src="gallery/skateboard.webp" alt="Street skateboarding" />
-    <p>A woman street skateboarding in Paris Olympics 2024</p>
-</div>
-<div class="gallery-item">
-    <img src="gallery/anime.jpg" alt="Anime samurai" />
-    <p>Anime style portrait of a female samurai at a beautiful lake with cherry trees, mountain fuji background, spring, sunset</p>
-</div>
-<div class="gallery-item">
-    <img src="gallery/viking.png" alt="Viking portrait" />
-    <p>A photorealistic close-up portrait of a bearded viking warrior in a horned helmet. He stares intensely into the distance while holding a battle axe. Dramatic mood lighting.</p>
-</div>
-''', unsafe_allow_html=True)
-
-st.markdown('</div>', unsafe_allow_html=True)
-
+# Placeholders for images and gallery
+generated_images_placeholder = st.empty()
+gallery_placeholder = st.empty()
 
 def configure_sidebar() -> None:
     with st.sidebar:
@@ -127,10 +96,10 @@ def configure_sidebar() -> None:
             st.image("gallery/logo.png", use_column_width=True)
 
             # First, the prompt field
-            prompt = st.text_area("Your idea goes here. Our AI will then enhance, optimize and then generate your image")
+            prompt = st.text_area(":orange[Prompt:]", value="Your idea goes here. Our AI will then enhance, optimize and then generate your image")
 
             # Then the Advanced Settings
-            with st.expander("Advanced Settings"):
+            with st.expander("**Advanced Settings**"):
                 # Advanced Settings for Flux-Dev
                 width = st.number_input("Width of output image", value=1024)
                 height = st.number_input("Height of output image", value=1024)
@@ -149,7 +118,6 @@ def configure_sidebar() -> None:
         st.markdown(":orange[**Resources:**]  \nReplicate AI")
 
         return submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt
-
 
 def main_page(submitted: bool, width: int, height: int, num_outputs: int,
               guidance_scale: float, num_inference_steps: int,
@@ -181,7 +149,7 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
 
                             for image in st.session_state.generated_image:
                                 with st.container():
-                                    st.image(image, caption="Generated Image 🎈", use_column_width=True)
+                                    st.image(image, caption="Generated Image", use_column_width=True)
                                     all_images.append(image)
 
                                     response = requests.get(image)
@@ -204,11 +172,30 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
     else:
         pass
 
+    with gallery_placeholder.container():
+        img = image_select(
+            label="Want to save an image? Right-click and save!",
+            images=[
+                "gallery/futurecity.webp", "gallery/robot.webp",
+                "gallery/fest.webp", "gallery/wizard.png",
+                "gallery/skateboard.webp",
+                "gallery/anime.jpg", "gallery/viking.png",
+            ],
+            captions=[
+                "A futuristic city skyline at sunset, with flying cars and glowing holograms, ultra-realistic",
+                "A robot bartender serving drinks to human and alien patrons in a sleek space station lounge, realistic.",
+                "A group of friends laughing and dancing at a music festival, joyful atmosphere, 35mm film photography",
+                "A wizard casting a spell, intense magical energy glowing from his hands",
+                "A woman street skateboarding in Paris Olympics 2024",
+                "Anime style portrait of a female samurai at a beautiful lake with cherry trees, mountain fuji background, spring, sunset",
+                "A photorealistic close-up portrait of a bearded viking warrior in a horned helmet. He stares intensely into the distance while holding a battle axe. Dramatic mood lighting."
+            ],
+            use_container_width=True
 
+        )
 def main():
     submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt = configure_sidebar()
     main_page(submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt)
-
 
 if __name__ == "__main__":
     main()
