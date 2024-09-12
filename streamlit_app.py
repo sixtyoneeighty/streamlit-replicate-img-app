@@ -3,6 +3,7 @@ import replicate
 import streamlit as st
 import google.generativeai as genai
 from streamlit_image_select import image_select
+from config import get_custom_css  # Import the CSS from the config file
 
 # Configure Gemini API with Streamlit secrets
 genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
@@ -10,58 +11,13 @@ genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 # Configure page layout
 st.set_page_config(page_title="sixtyoneeighty Image AI", layout="wide")
 
-# Custom CSS for additional styling
-st.markdown(
-    """
-    <style>
-    /* Set background color */
-    body {
-        background-color: #0D0D0D !important;
-    }
-
-    /* Sidebar styling */
-    section[data-testid="stSidebar"] {
-        background-color: #1A1A1A !important;
-    }
-
-    /* Add box shadows for sidebar */
-    section[data-testid="stSidebar"] {
-        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Import the Epilogue font from Google Fonts */
-    @import url('https://fonts.googleapis.com/css2?family=Epilogue:wght@100;200;300;400;500;600;700;800;900&display=swap');
-
-    /* Apply Epilogue font globally */
-    body, h1, h2, h3, h4, h5, h6, p, div {
-        font-family: 'Epilogue', sans-serif !important;
-        color: #E8E8E8 !important;
-    }
-
-    /* Customize buttons */
-    .button-container {
-        display: flex;
-        justify-content: space-between;
-        gap: 10px;
-        margin-top: 10px;
-    }
-
-    .stButton button {
-        background-color: #7F38F2 !important;
-        color: white !important;
-        border-radius: 8px !important;
-        padding: 0.5em 1.5em !important;
-        flex: 1;
-    }
-
-    .stButton button:hover {
-        background-color: #A64CF6 !important;
-    }
-    </style>
-    """, unsafe_allow_html=True
-)
+# Apply the custom CSS from the config
+st.markdown(get_custom_css(), unsafe_allow_html=True)
 
 st.markdown("# sixtyoneeighty")
+
+# Rest of your code...
+
 
 # Hardcoded Replicate model
 REPLICATE_MODEL_ENDPOINT = "black-forest-labs/flux-dev"
