@@ -126,7 +126,7 @@ The prompt should be a concise single line that an image generation AI can inter
 
     # Start a chat session with the Gemini model
     model = genai.GenerativeModel(
-        model_name="gemini-1.5-flash-exp-0827",
+        model_name="gemini-1.5-pro-exp-0827",
         generation_config={
             "temperature": 1.5,
             "top_p": 0.95,
