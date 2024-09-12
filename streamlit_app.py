@@ -3,7 +3,6 @@ import replicate
 import streamlit as st
 import google.generativeai as genai
 from streamlit_image_select import image_select
-from config import get_custom_css  # Import the CSS from the config file
 
 # Configure Gemini API with Streamlit secrets
 genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
@@ -11,14 +10,15 @@ genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 # Configure page layout
 st.set_page_config(page_title="sixtyoneeighty Image AI", layout="wide")
 
-# Apply the custom CSS from the config
-st.markdown(get_custom_css(), unsafe_allow_html=True)
+# Load custom CSS from the config.toml file via st.secrets
+custom_css = st.secrets["theme"]["custom_css"]
+
+# Apply the custom CSS
+st.markdown(custom_css, unsafe_allow_html=True)
 
 st.markdown("# sixtyoneeighty")
 
 # Rest of your code...
-
-
 # Hardcoded Replicate model
 REPLICATE_MODEL_ENDPOINT = "black-forest-labs/flux-dev"
 
