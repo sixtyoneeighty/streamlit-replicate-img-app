@@ -120,7 +120,7 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
         # Hide gallery once the image is generated
         gallery_placeholder.empty()
         with st.status('Generating...', expanded=True):
-            st.write("AI initiated")
+            
             try:
                 # Only show the generated image
                 output = replicate.run(
@@ -141,7 +141,7 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
                     st.session_state.generated_image = output
 
                     # Show the generated image, scaled down by setting the width
-                    st.image(st.session_state.generated_image[0], caption="Generated Image", use_column_width=False, width=400)
+                    st.image(st.session_state.generated_image[0],use_column_width=False, width=400)
 
             except Exception as e:
                 print(e)
