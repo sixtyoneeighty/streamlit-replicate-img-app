@@ -108,8 +108,21 @@ Follow this format: Main character or Main subject:..., Background:..., Lighting
 
 def get_enhanced_prompt(topic: str) -> str:
     """Use Gemini API to enhance the user's prompt."""
-    # Generate the system and user messages using magic_prompt
-    messages = magic_prompt(topic)
+    # Modify the prompt into a single text string that describes the instructions
+    prompt_text = f"""Please create a creative and detailed image generation prompt based on the following information:
+
+Topic: {topic}
+
+Your prompt should include the following elements if applicable:
+1. Main subject or character description
+2. Background and setting details
+3. Lighting, color scheme, and atmosphere
+4. Specific actions or poses for characters
+5. Important objects or elements to include
+6. Overall mood or emotion to convey
+7. Type of camera and lens used, if relevant
+
+The prompt should be a concise single line that an image generation AI can interpret directly."""
 
     # Start a chat session with the Gemini model
     model = genai.GenerativeModel(
@@ -124,11 +137,10 @@ def get_enhanced_prompt(topic: str) -> str:
         system_instruction="You are an AI assistant specializing in creating detailed prompts for image generation based on given topics and styles."
     )
 
-    chat_session = model.start_chat(history=messages)
+    # Instead of role/content, send just the prompt text
+    chat_session = model.start_chat(history=[])
+    response = chat_session.send_message(prompt_text)
 
-    # Send the message and get the enhanced prompt
-    response = chat_session.send_message("Generate an enhanced image prompt based on the provided messages.")
-    
     # Return the enhanced prompt
     return response.text
 
