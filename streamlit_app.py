@@ -69,6 +69,10 @@ REPLICATE_MODEL_ENDPOINT = "black-forest-labs/flux-dev"
 # Access Replicate API token from secrets
 REPLICATE_API_TOKEN = st.secrets["REPLICATE_API_TOKEN"]
 
+# Placeholders for images and gallery
+generated_images_placeholder = st.empty()
+gallery_placeholder = st.empty()
+
 # Global state to manage prompt text
 if "prompt" not in st.session_state:
     st.session_state["prompt"] = ""
@@ -192,6 +196,9 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
               disable_safety_checker: bool, topic: str, skip_enhancement: bool) -> None:
     """Main page logic for generating and displaying the image"""
     if submitted:
+        # Hide gallery once the image is generated
+        gallery_placeholder.empty()
+        
         with st.status('Generating image...', expanded=True):
             try:
                 if not skip_enhancement:
@@ -215,6 +222,29 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
 
             except Exception as e:
                 st.error(f"Error: {e}")
+    else:
+        # Display the gallery initially
+        with gallery_placeholder.container():
+            img = image_select(
+                label="Want to save an image? Right-click and save!",
+                images=[
+                    "gallery/futurecity.webp", "gallery/robot.webp",
+                    "gallery/fest.webp", "gallery/wizard.png",
+                    "gallery/skateboard.webp",
+                    "gallery/anime.jpg", "gallery/viking.png",
+                ],
+                captions=[
+                    "A futuristic city skyline at sunset, with flying cars and glowing holograms, ultra-realistic",
+                    "A robot bartender serving drinks to human and alien patrons in a sleek space station lounge, realistic.",
+                    "A group of friends laughing and dancing at a music festival, joyful atmosphere, 35mm film photography",
+                    "A wizard casting a spell, intense magical energy glowing from his hands",
+                    "A woman street skateboarding in Paris Olympics 2024",
+                    "Anime style portrait of a female samurai at a beautiful lake with cherry trees, mountain fuji background, spring, sunset",
+                    "A photorealistic close-up portrait of a bearded viking warrior in a horned helmet. He stares intensely into the distance while holding a battle axe. Dramatic mood lighting."
+                ],
+                use_container_width=True
+            )
+
 
 def main():
     submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt, skip_enhancement = configure_sidebar()
