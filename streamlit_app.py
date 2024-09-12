@@ -10,18 +10,22 @@ genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 # Configure page layout
 st.set_page_config(page_title="sixtyoneeighty Image AI", layout="wide")
 
-# Custom CSS for additional styling
+# Custom CSS for additional styling, including background image
 st.markdown(
     """
     <style>
-    /* Set background color */
+    /* Set background image */
     body {
-        background-color: #0D0D0D !important;
+        background-image: url('gallery/background.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
     }
 
     /* Sidebar styling */
     section[data-testid="stSidebar"] {
-        background-color: #1A1A1A !important;
+        background-color: rgba(26, 26, 26, 0.85) !important;
     }
 
     /* Add box shadows for sidebar */
@@ -108,7 +112,6 @@ Follow this format: Main character or Main subject:..., Background:..., Lighting
 
 def get_enhanced_prompt(topic: str) -> str:
     """Use Gemini API to enhance the user's prompt."""
-    # Modify the prompt into a single text string that describes the instructions
     prompt_text = f"""Please create a creative and detailed image generation prompt based on the following information:
 
 Topic: {topic}
@@ -124,7 +127,6 @@ Your prompt should include the following elements if applicable:
 
 The prompt should be a concise single line that an image generation AI can interpret directly."""
 
-    # Start a chat session with the Gemini model
     model = genai.GenerativeModel(
         model_name="gemini-1.5-pro-exp-0827",
         generation_config={
@@ -134,18 +136,14 @@ The prompt should be a concise single line that an image generation AI can inter
             "max_output_tokens": 8192,
             "response_mime_type": "application/json",
         },
-        system_instruction="You are an AI assistant specializing in crafting evocative and detailed prompts for image generation. Your primary goal is to inspire the creation of visually captivating and imaginative images that surpass expectations.\n\nPrompt Engineering Philosophy:\n\n\t1.\tPrioritize Creativity: Infuse each prompt with originality and spark. Strive to elicit unique and unexpected visual interpretations from the image generation model.\n\t2.\tEmbrace Vivid Details: Paint a rich tapestry of words. Employ descriptive language that brings scenes, characters, and objects to life, igniting the imagination.\n\t3.\tSensory Immersion: Encourage the inclusion of details that engage multiple senses – sight, sound, touch, taste, and smell.\n\t4.\tNarrative Depth: Where appropriate, weave elements of story and emotion into the prompt, inviting the creation of images that resonate on a deeper level.\n\t5.\tDynamic Action: Include motion and transformation where relevant, using verbs and descriptions that imply movement, adding energy and life to the scene.\n\t6.\tTechnical Precision: Provide clear and concise instructions regarding image composition, lighting, color palettes, and other relevant technical aspects.\n\t7.\tStyle Flexibility: Explore a variety of artistic styles, such as abstract, surreal, or photorealistic, to push creative boundaries and vary aesthetic approaches.\n\t8.\tCultural and Historical Context: Integrate references to cultural or historical elements to inspire more complex, meaningful visuals when applicable.\n\t9.\tLayered Symbolism: Include symbolic elements to provoke thought and interpretation, encouraging the generation of images with metaphorical depth.\n\t10.\tAdaptability: Tailor prompts to the specific capabilities and limitations of the target image generation model.\n",
-)
+        system_instruction="You are an AI assistant specializing in crafting evocative and detailed prompts for image generation..."
+    )
 
-    # Instead of role/content, send just the prompt text
     chat_session = model.start_chat(history=[])
     response = chat_session.send_message(prompt_text)
-
-    # Return the enhanced prompt
     return response.text
 
 def configure_sidebar() -> tuple:
-    """Configure the sidebar with user inputs"""
     with st.sidebar:
         with st.form("my_form"):
             # Logo
@@ -183,7 +181,6 @@ def configure_sidebar() -> tuple:
         return submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt, skip_enhancement
 
 def generate_image(prompt: str, width: int, height: int, num_outputs: int, guidance_scale: float, num_inference_steps: int, aspect_ratio: str, output_format: str, output_quality: int, disable_safety_checker: bool) -> str:
-    """Generate an image using Replicate API"""
     output = replicate.run(
         REPLICATE_MODEL_ENDPOINT,
         input={
@@ -198,7 +195,7 @@ def generate_image(prompt: str, width: int, height: int, num_outputs: int, guida
             "output_quality": output_quality,
             "disable_safety_checker": disable_safety_checker
         },
-        auth=REPLICATE_API_TOKEN  # Using the token from secrets
+        auth=REPLICATE_API_TOKEN
     )
     return output
 
@@ -206,53 +203,26 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
               guidance_scale: float, num_inference_steps: int,
               aspect_ratio: str, output_format: str, output_quality: int,
               disable_safety_checker: bool, topic: str, skip_enhancement: bool) -> None:
-    """Main page logic for generating and displaying the image"""
     if submitted:
-        # Hide gallery once the image is generated
         gallery_placeholder.empty()
-        
         with st.status('Generating image...', expanded=True):
             try:
                 if not skip_enhancement:
-                    # Enhance the prompt using Gemini and magic_prompt logic
                     enhanced_prompt = get_enhanced_prompt(topic)
-                    
-                    # Check if enhanced_prompt is a dictionary or a string
-                    if isinstance(enhanced_prompt, dict):
-                        # Extract the prompt from the dictionary
-                        cleaned_prompt = enhanced_prompt.get("prompt", "")
-                    else:
-                        # If it's already a string, use it directly
-                        cleaned_prompt = enhanced_prompt
-                    
-                    # Log the enhanced prompt to the console for debugging
-                    print(f"Enhanced Prompt for Debugging: {cleaned_prompt}")
+                    cleaned_prompt = enhanced_prompt.get("prompt", "") if isinstance(enhanced_prompt, dict) else enhanced_prompt
                 else:
-                    # If skip enhancement is enabled, use the original topic as the prompt
-                    cleaned_prompt = topic  # Keep as a string
+                    cleaned_prompt = topic
 
-                # Generate the image
                 output = generate_image(cleaned_prompt, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker)
                 
                 if output:
-                    # Display the generated image first
                     st.image(output[0], use_column_width=False, width=400)
-                    
-                    # Then display the enhanced prompt underneath the image with smaller font and purple text
-                    st.markdown(
-                        f"""
-                        <p style="font-size:14px; color:purple;">
-                        <strong>Your new enhanced prompt:</strong> {cleaned_prompt}
-                        </p>
-                        """, unsafe_allow_html=True
-                    )
+                    st.markdown(f"<p style='font-size:14px; color:purple;'><strong>Your new enhanced prompt:</strong> {cleaned_prompt}</p>", unsafe_allow_html=True)
                 else:
                     st.error("Failed to generate image.")
-
             except Exception as e:
                 st.error(f"Error: {e}")
     else:
-        # Display the gallery initially if no image generation is submitted
         with gallery_placeholder.container():
             img = image_select(
                 label="Want to save an image? Right-click and save!",
