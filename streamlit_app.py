@@ -223,10 +223,11 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
                     # Display the enhanced prompt in a cleaner format
                     st.markdown(f"### Your new enhanced prompt: **{enhanced_prompt['prompt']}**")
                 else:
-                    enhanced_prompt = topic
+                    # If skip enhancement is enabled, use the original topic as the prompt
+                    enhanced_prompt = {"prompt": topic}  # Create a dict to be consistent with the enhanced format
 
                 # Generate the image
-                output = generate_image(enhanced_prompt, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker)
+                output = generate_image(enhanced_prompt['prompt'], width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker)
                 
                 if output:
                     st.image(output[0], use_column_width=False, width=400)
@@ -235,9 +236,8 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
 
             except Exception as e:
                 st.error(f"Error: {e}")
-                
-                else:
-        # Display the gallery initially
+    else:
+        # Display the gallery initially if no image generation is submitted
         with gallery_placeholder.container():
             img = image_select(
                 label="Want to save an image? Right-click and save!",
