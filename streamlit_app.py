@@ -128,7 +128,8 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
         # Hide gallery once the image is generated
         gallery_placeholder.empty()
         with st.status('Generating...', expanded=True):
-              try:
+            
+            try:
                 # Only show the generated image
                 output = replicate.run(
                     REPLICATE_MODEL_ENDPOINT,
