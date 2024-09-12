@@ -220,7 +220,8 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
                     # Log the enhanced prompt to the console for debugging
                     print(f"Enhanced Prompt for Debugging: {enhanced_prompt}")
                     
-                    st.write(f"Enhanced Prompt: {enhanced_prompt}")  # Optional, remove if you don't want to display
+                    # Display the enhanced prompt in a cleaner format
+                    st.markdown(f"### Your new enhanced prompt: **{enhanced_prompt['prompt']}**")
                 else:
                     enhanced_prompt = topic
 
@@ -234,7 +235,8 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
 
             except Exception as e:
                 st.error(f"Error: {e}")
-    else:
+                
+                else:
         # Display the gallery initially
         with gallery_placeholder.container():
             img = image_select(
