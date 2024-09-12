@@ -37,21 +37,23 @@ st.markdown(
     }
 
     /* Customize buttons */
+    .button-container {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
     .stButton button {
         background-color: #7F38F2 !important;
         color: white !important;
         border-radius: 8px !important;
         padding: 0.5em 1.5em !important;
+        flex: 1;
     }
 
     .stButton button:hover {
         background-color: #A64CF6 !important; /* Lighter purple on hover */
-    }
-
-    /* Flexbox to align Generate and Clear buttons */
-    .button-container {
-        display: flex;
-        justify-content: space-between;
     }
     </style>
     """, unsafe_allow_html=True
@@ -97,8 +99,8 @@ def configure_sidebar() -> None:
             # Container to align the buttons in one row
             st.markdown('<div class="button-container">', unsafe_allow_html=True)
             
-            # Submit and Clear buttons
-            submitted = st.form_submit_button("Generate", type="primary", use_container_width=True)
+            # Submit and Clear buttons side by side
+            submitted = st.form_submit_button("Generate", type="primary")
             if st.form_submit_button("Clear Prompt"):
                 st.session_state["prompt"] = ""
                 st.experimental_rerun()
