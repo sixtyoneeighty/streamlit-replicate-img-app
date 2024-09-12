@@ -96,7 +96,8 @@ def configure_sidebar() -> None:
             st.image("gallery/logo.png", use_column_width=True)
 
             # First, the prompt field
-            prompt = st.text_area(":orange[Prompt:]", value="Your idea goes here. Our AI will then enhance, optimize and then generate your image")
+            prompt = st.text_area("Prompt:", 
+                      placeholder="Enter your idea here. Our AI will then enhance, optimize, and generate your image.")
 
             # Then the Advanced Settings
             with st.expander("**Advanced Settings**"):
