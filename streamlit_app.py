@@ -10,7 +10,7 @@ genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 # Configure page layout
 st.set_page_config(page_title="sixtyoneeighty Image AI", layout="wide")
 
-# Custom CSS for additional styling, including background image and header bar fix
+# Custom CSS for additional styling, including background image
 st.markdown(
     """
     <style>
@@ -21,13 +21,6 @@ st.markdown(
         background-repeat: no-repeat;
         background-attachment: fixed;
         background-position: center;
-    }
-
-    /* Limit header height and set the color */
-    header {
-        background-color: #7F38F2 !important; /* Set to purple */
-        height: auto !important;
-        padding: 10px 0 !important; /* Add a little padding */
     }
 
     /* Sidebar styling */
