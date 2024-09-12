@@ -125,75 +125,60 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
               aspect_ratio: str, output_format: str, output_quality: int,
               disable_safety_checker: bool, prompt: str) -> None:
     if submitted:
-        with st.status('Generating..', expanded=True):
+        # Hide gallery once the image is generated
+        gallery_placeholder.empty()
+        with st.status('Generating...', expanded=True):
             st.write("AI initiated")
             try:
-                if submitted:
-                    with generated_images_placeholder.container():
-                        all_images = []
-                        output = replicate.run(
-                            REPLICATE_MODEL_ENDPOINT,
-                            input={
-                                "prompt": prompt,
-                                "guidance": guidance_scale,
-                                "num_outputs": num_outputs,
-                                "num_inference_steps": num_inference_steps,
-                                "aspect_ratio": aspect_ratio,
-                                "output_format": output_format,
-                                "output_quality": output_quality,
-                                "disable_safety_checker": disable_safety_checker
-                            }
-                        )
-                        if output:
-                            st.toast('Your image has been generated!', icon='😍')
-                            st.session_state.generated_image = output
+                # Only show the generated image
+                output = replicate.run(
+                    REPLICATE_MODEL_ENDPOINT,
+                    input={
+                        "prompt": prompt,
+                        "guidance": guidance_scale,
+                        "num_outputs": num_outputs,
+                        "num_inference_steps": num_inference_steps,
+                        "aspect_ratio": aspect_ratio,
+                        "output_format": output_format,
+                        "output_quality": output_quality,
+                        "disable_safety_checker": disable_safety_checker
+                    }
+                )
 
-                            for image in st.session_state.generated_image:
-                                with st.container():
-                                    st.image(image, caption="Generated Image", use_column_width=True)
-                                    all_images.append(image)
+                if output:
+                    st.session_state.generated_image = output
 
-                                    response = requests.get(image)
+                    # Show the generated image only
+                    st.image(st.session_state.generated_image[0], caption="Generated Image", use_column_width=True)
 
-                        st.session_state.all_images = all_images
-
-                        zip_io = io.BytesIO()
-                        with zipfile.ZipFile(zip_io, 'w') as zipf:
-                            for i, image in enumerate(st.session_state.all_images):
-                                response = requests.get(image)
-                                if response.status_code == 200:
-                                    image_data = response.content
-                                    zipf.writestr(f"output_file_{i+1}.png", image_data)
-
-                        st.download_button(":red[**Download All Images**]", data=zip_io.getvalue(), file_name="output_files.zip", mime="application/zip", use_container_width=True)
             except Exception as e:
                 print(e)
                 st.error(f'Encountered an error: {e}', icon="🚨")
 
     else:
-        pass
+        # Display the gallery initially
+        with gallery_placeholder.container():
+            img = image_select(
+                label="Want to save an image? Right-click and save!",
+                images=[
+                    "gallery/futurecity.webp", "gallery/robot.webp",
+                    "gallery/fest.webp", "gallery/wizard.png",
+                    "gallery/skateboard.webp",
+                    "gallery/anime.jpg", "gallery/viking.png",
+                ],
+                captions=[
+                    "A futuristic city skyline at sunset, with flying cars and glowing holograms, ultra-realistic",
+                    "A robot bartender serving drinks to human and alien patrons in a sleek space station lounge, realistic.",
+                    "A group of friends laughing and dancing at a music festival, joyful atmosphere, 35mm film photography",
+                    "A wizard casting a spell, intense magical energy glowing from his hands",
+                    "A woman street skateboarding in Paris Olympics 2024",
+                    "Anime style portrait of a female samurai at a beautiful lake with cherry trees, mountain fuji background, spring, sunset",
+                    "A photorealistic close-up portrait of a bearded viking warrior in a horned helmet. He stares intensely into the distance while holding a battle axe. Dramatic mood lighting."
+                ],
+                use_container_width=True
+            )
 
-    with gallery_placeholder.container():
-        img = image_select(
-            label="Want to save an image? Right-click and save!",
-            images=[
-                "gallery/futurecity.webp", "gallery/robot.webp",
-                "gallery/fest.webp", "gallery/wizard.png",
-                "gallery/skateboard.webp",
-                "gallery/anime.jpg", "gallery/viking.png",
-            ],
-            captions=[
-                "A futuristic city skyline at sunset, with flying cars and glowing holograms, ultra-realistic",
-                "A robot bartender serving drinks to human and alien patrons in a sleek space station lounge, realistic.",
-                "A group of friends laughing and dancing at a music festival, joyful atmosphere, 35mm film photography",
-                "A wizard casting a spell, intense magical energy glowing from his hands",
-                "A woman street skateboarding in Paris Olympics 2024",
-                "Anime style portrait of a female samurai at a beautiful lake with cherry trees, mountain fuji background, spring, sunset",
-                "A photorealistic close-up portrait of a bearded viking warrior in a horned helmet. He stares intensely into the distance while holding a battle axe. Dramatic mood lighting."
-            ],
-            use_container_width=True
 
-        )
 def main():
     submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt = configure_sidebar()
     main_page(submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt)
