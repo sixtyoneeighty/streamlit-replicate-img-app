@@ -114,19 +114,19 @@ def get_enhanced_prompt(topic: str) -> str:
 Topic: {topic}
 
 Your prompt should include the following elements if applicable:
-1. Main subject or character description
-2. Background and setting details
-3. Lighting, color scheme, and atmosphere
-4. Specific actions or poses for characters
-5. Important objects or elements to include
-6. Overall mood or emotion to convey
-7. Type of camera and lens used, if relevant
+1. Subject: The main focus of the image.
+2. Style: The artistic approach or visual aesthetic.
+3. Composition: How elements are arranged within the frame.
+4. Lighting: The type and quality of light in the scene.
+5. Mood/Atmosphere: The emotional tone or ambiance of the image.
+6. Technical Details: Camera settings, perspective, or specific visual techniques.
+7. Additional Elements: Background, poses, actions, other objects in photo, things that bring the image to life
 
 The prompt should be a concise single line that an image generation AI can interpret directly."""
 
     # Start a chat session with the Gemini model
     model = genai.GenerativeModel(
-        model_name="gemini-1.5-pro-exp-0827",
+        model_name="gemini-1.5-flash-exp-0827",
         generation_config={
             "temperature": 1.5,
             "top_p": 0.95,
@@ -134,8 +134,8 @@ The prompt should be a concise single line that an image generation AI can inter
             "max_output_tokens": 8192,
             "response_mime_type": "application/json",
         },
-        system_instruction="You are an AI assistant specializing in creating detailed prompts for image generation based on given topics and styles."
-    )
+        system_instruction="You are an AI assistant specializing in crafting evocative and detailed prompts for image generation. Your primary goal is to inspire the creation of visually captivating and imaginative images that surpass expectations.\n\nPrompt Engineering Philosophy:\n\n\t1.\tPrioritize Creativity: Infuse each prompt with originality and spark. Strive to elicit unique and unexpected visual interpretations from the image generation model.\n\t2.\tEmbrace Vivid Details: Paint a rich tapestry of words. Employ descriptive language that brings scenes, characters, and objects to life, igniting the imagination.\n\t3.\tSensory Immersion: Encourage the inclusion of details that engage multiple senses – sight, sound, touch, taste, and smell.\n\t4.\tNarrative Depth: Where appropriate, weave elements of story and emotion into the prompt, inviting the creation of images that resonate on a deeper level.\n\t5.\tDynamic Action: Include motion and transformation where relevant, using verbs and descriptions that imply movement, adding energy and life to the scene.\n\t6.\tTechnical Precision: Provide clear and concise instructions regarding image composition, lighting, color palettes, and other relevant technical aspects.\n\t7.\tStyle Flexibility: Explore a variety of artistic styles, such as abstract, surreal, or photorealistic, to push creative boundaries and vary aesthetic approaches.\n\t8.\tCultural and Historical Context: Integrate references to cultural or historical elements to inspire more complex, meaningful visuals when applicable.\n\t9.\tLayered Symbolism: Include symbolic elements to provoke thought and interpretation, encouraging the generation of images with metaphorical depth.\n\t10.\tAdaptability: Tailor prompts to the specific capabilities and limitations of the target image generation model.\n",
+)
 
     # Instead of role/content, send just the prompt text
     chat_session = model.start_chat(history=[])
