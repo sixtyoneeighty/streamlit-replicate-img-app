@@ -145,7 +145,7 @@ def configure_sidebar():
             st.image("gallery/logo.png", use_column_width=True)
 
             # Input prompt
-            prompt = st.text_area("Prompt:", value=st.session_state["prompt"],
+            prompt = st.text_area("Prompt:", value=st.session_state.get("prompt", ""),
                                   placeholder="Enter your idea here. Our AI will enhance, optimize, and generate your image.")
 
             # Checkbox to skip prompt enhancement
@@ -163,13 +163,9 @@ def configure_sidebar():
                 output_quality = st.slider('Output quality (0-100)', value=80, min_value=0, max_value=100)
                 disable_safety_checker = st.checkbox("Disable safety checker", value=True)
 
-            # Buttons
-            st.markdown('<div class="button-container">', unsafe_allow_html=True)
-            submitted = st.form_submit_button("Generate Image", type="primary")
-            if st.form_submit_button("Clear"):
-                st.session_state["prompt"] = ""
-                st.experimental_rerun()
-            st.markdown('</div>', unsafe_allow_html=True)
+            submitted = st.form_submit_button("Generate Image")
+
+    return (submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt, skip_enhancement)
 
 def generate_image(prompt_text: str, model: str, steps: int, n: int):ht, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt, skip_enhancement
 def generate_image(prompt_text: str):
