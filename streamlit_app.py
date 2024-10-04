@@ -8,7 +8,7 @@ from streamlit_image_select import image_select
 genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 
 # Configure Together API
-client = Together(api_key=os.environ.get('TOGETHER_API_KEY'))
+client = Together(api_key=os.environ.get('TOGETHER_API_TOKEN'))
 
 # Configure page layout
 st.set_page_config(page_title="sixtyoneeighty Image AI", layout="wide")
