@@ -68,13 +68,11 @@ st.markdown(
 st.markdown("# sixtyoneeighty")
 
 # Hardcoded TOGETHER model
-TOGETHER_MODEL_ENDPOINT = "black-forest-labs/flux-dev"
-# Access TOGETHER API token from secrets
-# Access TOGETHER API token from secrets
+TOGETHER_MODEL_ENDPOINT = "black-forest-labs/FLUX.1.1-pro"
+
 TOGETHER_API_TOKEN = st.secrets["TOGETHER_API_TOKEN"]
 # Configure Together API
-client = Together(api_key=os.environ.get('TOGETHER_API_TOKEN'))
-TOGETHER_API_TOKEN = st.secrets["TOGETHER_API_TOKEN"]
+client = Together(api_key=os.environ.get('TOGETHER_API_KEY'))
 
 # Placeholders for images and gallery
 generated_images_placeholder = st.empty()
@@ -169,14 +167,14 @@ def configure_sidebar():
 
 def generate_image(prompt_text: str, model: str, steps: int, n: int):ht, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt, skip_enhancement
 def generate_image(prompt_text: str):
+def generate_image(prompt_text: str, model: str, steps: int, n: int):
     response = client.images.generate(
         prompt=prompt_text,
-        model="black-forest-labs/FLUX.1.1-pro",
-        steps=10,
-        n=4
+        model=model,
+        steps=steps,
+        n=n
     )
     return response.data[0].b64_json
-
 def main_page(submitted: bool, width: int, height: int, num_outputs: int,
               guidance_scale: float, num_inference_steps: int,
               aspect_ratio: str, output_format: str, output_quality: int,
