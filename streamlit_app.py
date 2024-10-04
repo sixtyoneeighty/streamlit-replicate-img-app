@@ -7,6 +7,9 @@ from streamlit_image_select import image_select
 # Configure Gemini API with Streamlit secrets
 genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 
+# Configure Together API
+client = Together(api_key=os.environ.get('TOGETHER_API_KEY'))
+
 # Configure page layout
 st.set_page_config(page_title="sixtyoneeighty Image AI", layout="wide")
 
@@ -62,17 +65,16 @@ st.markdown(
         background-color: #A64CF6 !important; /* Lighter purple on hover */
     }
     </style>
-    """, unsafe_allow_html=True
+    """,
+    unsafe_allow_html=True
 )
 
 st.markdown("# sixtyoneeighty")
 
 # Hardcoded TOGETHER model
 TOGETHER_MODEL_ENDPOINT = "black-forest-labs/FLUX.1.1-pro"
-
+# Access TOGETHER API token from
 TOGETHER_API_TOKEN = st.secrets["TOGETHER_API_TOKEN"]
-# Configure Together API
-client = Together(api_key=os.environ.get('TOGETHER_API_KEY'))
 
 # Placeholders for images and gallery
 generated_images_placeholder = st.empty()
@@ -134,8 +136,6 @@ Your prompt should include the following elements if applicable:
     )
     chat_session = model.start_chat(history=[])
     response = chat_session.send_message(prompt_text)
-    return response.text
-
 def configure_sidebar():
     with st.sidebar:
         with st.form("my_form"):
@@ -151,34 +151,34 @@ def configure_sidebar():
 
             # Advanced settings
             with st.expander("**Advanced Settings**"):
-                width = st.number_input("Width of output image", value=512)
-                height = st.number_input("Height of output image", value=512)
-                num_outputs = st.slider("Number of images to output", value=1, min_value=1, max_value=2)
-                guidance_scale = st.slider("Guidance scale (0 to 10)", value=3.5, min_value=0.0, max_value=10.0, step=0.1)
-                num_inference_steps = st.slider("Number of denoising steps", value=28, min_value=1, max_value=50)
-                aspect_ratio = st.selectbox('Aspect Ratio', ('1:1', '5:4', '16:9'))
-                output_format = st.selectbox('Output format', ('webp', 'jpg', 'png'))
-                output_quality = st.slider('Output quality (0-100)', value=80, min_value=0, max_value=100)
-                disable_safety_checker = st.checkbox("Disable safety checker", value=True)
+                image_size = st.selectbox("Image Size", ["square_hd", "square", "portrait_4_3", "portrait_16_9", "landscape_4_3", "landscape_16_9"], index=4)
+                seed = st.number_input("Seed (optional)", value=0, min_value=0, step=1)
+                sync_mode = st.checkbox("Sync Mode", value=True)
+                num_images = st.slider("Number of images to generate", value=1, min_value=1, max_value=10)
+                enable_safety_checker = st.checkbox("Enable Safety Checker", value=False)
+                safety_tolerance = st.selectbox("Safety Tolerance", ["1", "2", "3", "4", "5", "6"], index=1)
 
             submitted = st.form_submit_button("Generate Image")
+
+    return (submitted, prompt, image_size, seed, sync_mode, num_images, enable_safety_checker, safety_tolerance, skip_enhancement)
 
     return (submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt, skip_enhancement)
 
 def generate_image(prompt_text: str, model: str, steps: int, n: int):ht, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt, skip_enhancement
-def generate_image(prompt_text: str):
-def generate_image(prompt_text: str, model: str, steps: int, n: int):
+def generate_image(prompt: str, image_size: str, num_images: int, enable_safety_checker: bool, safety_tolerance: str, seed: int = None, sync_mode: bool = True):
     response = client.images.generate(
-        prompt=prompt_text,
-        model=model,
-        steps=steps,
-        n=n
+        prompt=prompt,
+        model=TOGETHER_MODEL_ENDPOINT,
+        image_size=image_size,
+        num_images=num_images,
+        enable_safety_checker=enable_safety_checker,
+        safety_tolerance=safety_tolerance,
+        seed=seed,
+        sync_mode=sync_mode
     )
     return response.data[0].b64_json
-def main_page(submitted: bool, width: int, height: int, num_outputs: int,
-              guidance_scale: float, num_inference_steps: int,
-              aspect_ratio: str, output_format: str, output_quality: int,
-              disable_safety_checker: bool, topic: str, skip_enhancement: bool) -> None:
+
+def main_page(submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt, skip_enhancement) -> None:
     if submitted:
         gallery_placeholder.empty()
         with st.status('Generating image...', expanded=True):
@@ -222,9 +222,24 @@ def main_page(submitted: bool, width: int, height: int, num_outputs: int,
                 use_container_width=True
             )
             
-
 def main():
-    submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt, skip_enhancement = configure_sidebar()
+    submitted, prompt, image_size, seed, sync_mode, num_images, enable_safety_checker, safety_tolerance, skip_enhancement = configure_sidebar()
+
+    if submitted:
+        if not skip_enhancement:
+            prompt = get_enhanced_prompt(prompt)
+        
+        image_data = generate_image(
+            prompt=prompt,
+            image_size=image_size,
+            num_images=num_images,
+            enable_safety_checker=enable_safety_checker,
+            safety_tolerance=safety_tolerance,
+            seed=seed if seed != 0 else None,
+            sync_mode=sync_mode
+        )
+        
+        st.image(image_data, caption="Generated Image", use_column_width=True)e_sidebar()
     main_page(submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt, skip_enhancement)
 
 if __name__ == "__main__":
