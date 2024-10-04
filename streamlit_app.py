@@ -136,6 +136,8 @@ Your prompt should include the following elements if applicable:
     )
     chat_session = model.start_chat(history=[])
     response = chat_session.send_message(prompt_text)
+    return response.text
+
 def configure_sidebar():
     with st.sidebar:
         with st.form("my_form"):
@@ -162,9 +164,6 @@ def configure_sidebar():
 
     return (submitted, prompt, image_size, seed, sync_mode, num_images, enable_safety_checker, safety_tolerance, skip_enhancement)
 
-    return (submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt, skip_enhancement)
-
-def generate_image(prompt_text: str, model: str, steps: int, n: int):ht, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt, skip_enhancement
 def generate_image(prompt: str, image_size: str, num_images: int, enable_safety_checker: bool, safety_tolerance: str, seed: int = None, sync_mode: bool = True):
     response = client.images.generate(
         prompt=prompt,
@@ -178,50 +177,6 @@ def generate_image(prompt: str, image_size: str, num_images: int, enable_safety_
     )
     return response.data[0].b64_json
 
-def main_page(submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt, skip_enhancement) -> None:
-    if submitted:
-        gallery_placeholder.empty()
-        with st.status('Generating image...', expanded=True):
-            try:
-                if not skip_enhancement:
-                    enhanced_prompt = get_enhanced_prompt(topic)
-                    cleaned_prompt = enhanced_prompt.get("prompt", "") if isinstance(enhanced_prompt, dict) else enhanced_prompt
-                else:
-                    cleaned_prompt = topic
-
-                output = generate_image(cleaned_prompt, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker)
-                
-                if output:
-                    st.image(output[0], use_column_width=False, width=400)
-                    st.markdown(f"<p style='font-size:14px; color:purple;'><strong>Your new enhanced prompt:</strong> {cleaned_prompt}</p>", unsafe_allow_html=True)
-                else:
-                    st.error("Failed to generate image.")
-            except Exception as e:
-                st.error(f"Error: {e}")
-    else:
-        with gallery_placeholder.container():
-            img = image_select(
-                label="Want to save an image? Right-click and save!",
-
-
-                images=[
-                    "gallery/futurecity.webp", "gallery/robot.webp",
-                    "gallery/fest.webp", "gallery/wizard.png",
-                    "gallery/skateboard.webp",
-                    "gallery/anime.jpg", "gallery/viking.png",
-                ],
-                captions=[
-                    "A futuristic city skyline at sunset, with flying cars and glowing holograms, ultra-realistic",
-                    "A robot bartender serving drinks to human and alien patrons in a sleek space station lounge, realistic.",
-                    "A group of friends laughing and dancing at a music festival, joyful atmosphere, 35mm film photography",
-                    "A wizard casting a spell, intense magical energy glowing from his hands",
-                    "A woman street skateboarding in Paris Olympics 2024",
-                    "Anime style portrait of a female samurai at a beautiful lake with cherry trees, mountain fuji background, spring, sunset",
-                    "A photorealistic close-up portrait of a bearded viking warrior in a horned helmet. He stares intensely into the distance while holding a battle axe. Dramatic mood lighting."
-                ],
-                use_container_width=True
-            )
-            
 def main():
     submitted, prompt, image_size, seed, sync_mode, num_images, enable_safety_checker, safety_tolerance, skip_enhancement = configure_sidebar()
 
@@ -233,14 +188,3 @@ def main():
             prompt=prompt,
             image_size=image_size,
             num_images=num_images,
-            enable_safety_checker=enable_safety_checker,
-            safety_tolerance=safety_tolerance,
-            seed=seed if seed != 0 else None,
-            sync_mode=sync_mode
-        )
-        
-        st.image(image_data, caption="Generated Image", use_column_width=True)e_sidebar()
-    main_page(submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt, skip_enhancement)
-
-if __name__ == "__main__":
-    main()
