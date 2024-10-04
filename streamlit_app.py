@@ -77,7 +77,7 @@ Your prompt should include the following elements if applicable:
     model = genai.GenerativeModel(
         model_name="gemini-1.5-pro-latest",  # Updated model name
         generation_config={
-            "temperature": 1.3,  # Updated temperature value
+            "temperature": 1.0,  # Updated temperature value
             "top_p": 0.95,
             "top_k": 64,
             "max_output_tokens": 8192,
