@@ -3,6 +3,10 @@ import streamlit as st
 import google.generativeai as genai
 from streamlit_image_select import image_select
 from together import Together
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.DEBUG)
 
 # Configure Gemini API with Streamlit secrets
 genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
@@ -83,36 +87,55 @@ Your prompt should include the following elements if applicable:
             "max_output_tokens": 8192,
         },
     )
-    chat_session = model.start_chat(history=[])
-    response = chat_session.send_message(prompt_text)
-    return response.text
-
 def configure_sidebar() -> tuple:
     with st.sidebar:
         with st.form("my_form"):
-            # Logo
-            st.image("gallery/logo.png", use_column_width=True)
+            try:
+                # Logo
+                st.image("gallery/logo.png", use_column_width=True)
+            except Exception as e:
+                logging.error(f"Error loading image: {e}")
 
             # Input prompt
-            prompt = st.text_area(
-                "Prompt:",
-                value=st.session_state["prompt"],
-                placeholder="Enter your idea here. Our AI will enhance, optimize, and generate your image.",
-            )
+            try:
+                prompt = st.text_area(
+                    "Prompt:",
+                    value=st.session_state.get("prompt", ""),
+                    placeholder="Enter your idea here. Our AI will enhance, optimize, and generate your image.",
+                )
+            except Exception as e:
+                logging.error(f"Error with text area: {e}")
+                prompt = ""
 
             # Checkbox to skip prompt enhancement
-            skip_enhancement = st.checkbox("Skip Prompt Enhancement", value=False)
+            try:
+                skip_enhancement = st.checkbox("Skip Prompt Enhancement", value=False)
+            except Exception as e:
+                logging.error(f"Error with checkbox: {e}")
+                skip_enhancement = False
 
             # Buttons
             st.markdown('<div class="button-container">', unsafe_allow_html=True)
-            submitted = st.form_submit_button("Generate Image", type="primary")
-            if st.form_submit_button("Clear"):
-                st.session_state["prompt"] = ""
-                st.experimental_rerun()
-            st.markdown("</div>", unsafe_allow_html=True)
+            try:
+                submitted = st.form_submit_button("Generate Image", type="primary")
+def generate_image(prompt: str) -> str:
+    try:
+        response = client.images.generate(
+            prompt=prompt,
+            model="black-forest-labs/FLUX.1.1-pro",
+            width=1024,
+            height=768,
+            steps=1,
+            n=1,
+            response_format="b64_json",
+        )
+        return response.data[0].b64_json
+    except Exception as e:
+        logging.error(f"Error generating image: {e}")
+        return "Error generating image"  \n[Your guide to sixtyoneeighty Image AI](https://sites.google.com/sixtyoneeightyai.com/imageai/home)'
+        )
 
-        # Resource section with the new link and no 'Replicate AI' text
-        st.markdown(
+        return submitted, prompt, skip_enhancement
             ':orange[**Resources:**]  \n[Your guide to sixtyoneeighty Image AI](https://sites.google.com/sixtyoneeightyai.com/imageai/home)'
         )
 
