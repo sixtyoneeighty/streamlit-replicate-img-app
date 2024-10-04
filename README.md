@@ -1,6 +1,6 @@
 # ✨ Image Generation App ✨
 
-[![Streamlit Replicate Image App](https://github.com/tonykipkemboi/streamlit-replicate-img-app/actions/workflows/python-app.yml/badge.svg)](https://github.com/tonykipkemboi/streamlit-replicate-img-app/actions/workflows/python-app.yml)
+[![Streamlit TOGETHER Image App](https://github.com/tonykipkemboi/streamlit-TOGETHER-img-app/actions/workflows/python-app.yml/badge.svg)](https://github.com/tonykipkemboi/streamlit-TOGETHER-img-app/actions/workflows/python-app.yml)
 
 _Image Generator App: where art meets algorithms and dreams meet pixels!_ 🚀
 
@@ -8,11 +8,11 @@ _Image Generator App: where art meets algorithms and dreams meet pixels!_ 🚀
 
 ## Overview
 
-Powered by cutting-edge AI models running on [Replicate](https://replicate.com/about) and wrapped in a Streamlit interface, this app lets you transform plain text prompts into mesmerizing visual masterpieces.
+Powered by cutting-edge AI models running on [TOGETHER](https://TOGETHER.com/about) and wrapped in a Streamlit interface, this app lets you transform plain text prompts into mesmerizing visual masterpieces.
 
 ## Technical Features
 
-- **Neural Model**: Leverages the power of the replicate.run model for image generation, providing detailed and accurate depictions.
+- **Neural Model**: Leverages the power of the TOGETHER.run model for image generation, providing detailed and accurate depictions.
 - **Streamlit Framework**: Built atop the versatile Streamlit library, ensuring a smooth and responsive UI/UX.
 - **Dynamic Customization**: You can peek "under the hood", tune hyperparameters like guidance_scale, prompt_strength, and more for fine-grained control.
 - **Gallery**: A curated gallery for inspiration, showcasing the prowess of the underlying model.
@@ -22,13 +22,13 @@ Powered by cutting-edge AI models running on [Replicate](https://replicate.com/a
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/tonykipkemboi/streamlit-replicate-img-app.git
+   git clone https://github.com/tonykipkemboi/streamlit-TOGETHER-img-app.git
    ```
 
 2. Navigate to the project directory:
 
    ```bash
-   cd streamlit-replicate-img-app
+   cd streamlit-TOGETHER-img-app
    ```
 
 3. Install the dependencies:
@@ -39,10 +39,10 @@ Powered by cutting-edge AI models running on [Replicate](https://replicate.com/a
 
 4. Rename the `.streamlit/example_secrets.toml` file to `.streamlit/secrets.toml`.
 
-5. Paste your Replicate API token in the secrets.toml file:
+5. Paste your TOGETHER API token in the secrets.toml file:
 
    ```bash
-   REPLICATE_API_TOKEN = "paste-your-replicate-api-token-here"
+   TOGETHER_API_TOKEN = "paste-your-TOGETHER-api-token-here"
    ```
 
 ## Usage

@@ -1,5 +1,3 @@
-import os
-import replicate
 from together import Together
 import streamlit as st
 import google.generativeai as genai
@@ -68,14 +66,14 @@ st.markdown(
 
 st.markdown("# sixtyoneeighty")
 
-# Hardcoded Replicate model
-REPLICATE_MODEL_ENDPOINT = "black-forest-labs/flux-dev"
-# Access Replicate API token from secrets
-REPLICATE_API_TOKEN = st.secrets["REPLICATE_API_TOKEN"]
+# Hardcoded TOGETHER model
+TOGETHER_MODEL_ENDPOINT = "black-forest-labs/flux-dev"
+# Access TOGETHER API token from secrets
+# Access TOGETHER API token from secrets
+TOGETHER_API_TOKEN = st.secrets["TOGETHER_API_TOKEN"]
 
-# Initialize Together client
-client = Together(api_key=os.environ.get('TOGETHER_API_KEY'))
-REPLICATE_API_TOKEN = st.secrets["REPLICATE_API_TOKEN"]
+client = Together(api_key=TOGETHER_API_TOKEN)
+TOGETHER_API_TOKEN = st.secrets["TOGETHER_API_TOKEN"]
 
 # Placeholders for images and gallery
 generated_images_placeholder = st.empty()
@@ -127,9 +125,9 @@ Your prompt should include the following elements if applicable:
 7. Additional Elements: Background, poses, actions, other objects in the photo."""
     
     model = genai.GenerativeModel(
-        model_name="gemini-1.5-pro-exp-0827",
+        model_name="gemini-1.5-pro-latest",
         generation_config={
-            "temperature": 1.5,
+            "temperature": 1.3,
             "top_p": 0.95,
             "top_k": 64,
             "max_output_tokens": 8192,
@@ -139,7 +137,7 @@ Your prompt should include the following elements if applicable:
     response = chat_session.send_message(prompt_text)
     return response.text
 
-def configure_sidebar() -> tuple:
+def configure_sidebar():
     with st.sidebar:
         with st.form("my_form"):
             # Logo
@@ -172,7 +170,7 @@ def configure_sidebar() -> tuple:
                 st.experimental_rerun()
             st.markdown('</div>', unsafe_allow_html=True)
 
-        # Resource section with the new link and no 'Replicate AI' text
+        return submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt, skip_enhancement
 def generate_image(prompt_text: str):
     response = client.images.generate(
         prompt=prompt_text,
@@ -180,11 +178,7 @@ def generate_image(prompt_text: str):
         steps=10,
         n=4
     )
-    return response.data[0].b64_jsonble_safety_checker": disable_safety_checker
-        },
-        auth=REPLICATE_API_TOKEN
-    )
-    return output
+    return response.data[0].b64_json
 
 def main_page(submitted: bool, width: int, height: int, num_outputs: int,
               guidance_scale: float, num_inference_steps: int,

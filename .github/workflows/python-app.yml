@@ -1,4 +1,4 @@
-name: Streamlit Replicate Image App
+name: Streamlit TOGETHER Image App
 
 on:
   push:
