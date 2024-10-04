@@ -118,6 +118,20 @@ def configure_sidebar() -> tuple:
             st.markdown('<div class="button-container">', unsafe_allow_html=True)
             try:
                 submitted = st.form_submit_button("Generate Image", type="primary")
+                if st.form_submit_button("Clear"):
+                    st.session_state["prompt"] = ""
+                    st.experimental_rerun()
+            except Exception as e:
+                logging.error(f"Error with form buttons: {e}")
+                submitted = False
+            st.markdown("</div>", unsafe_allow_html=True)
+
+        # Resource section with the new link and no 'Replicate AI' text
+        st.markdown(
+            ':orange[**Resources:**]  \n[Your guide to sixtyoneeighty Image AI](https://sites.google.com/sixtyoneeightyai.com/imageai/home)'
+        )
+
+        return submitted, prompt, skip_enhancement
 def generate_image(prompt: str) -> str:
     try:
         response = client.images.generate(
@@ -132,14 +146,7 @@ def generate_image(prompt: str) -> str:
         return response.data[0].b64_json
     except Exception as e:
         logging.error(f"Error generating image: {e}")
-        return "Error generating image"  \n[Your guide to sixtyoneeighty Image AI](https://sites.google.com/sixtyoneeightyai.com/imageai/home)'
-        )
-
-        return submitted, prompt, skip_enhancement
-            ':orange[**Resources:**]  \n[Your guide to sixtyoneeighty Image AI](https://sites.google.com/sixtyoneeightyai.com/imageai/home)'
-        )
-
-        return submitted, prompt, skip_enhancement
+        return "Error generating image"
 
 def generate_image(prompt: str) -> str:
     response = client.images.generate(
