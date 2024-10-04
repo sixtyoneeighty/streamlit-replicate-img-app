@@ -72,7 +72,7 @@ st.markdown(
 st.markdown("# sixtyoneeighty")
 
 # Hardcoded TOGETHER model
-TOGETHER_MODEL_ENDPOINT = "black-forest-labs/FLUX.1.1-pro"
+TOGETHER_MODEL_ENDPOINT = "black-forest-labs/flux-pro"
 # Access TOGETHER API token from
 TOGETHER_API_TOKEN = st.secrets["TOGETHER_API_TOKEN"]
 
@@ -172,7 +172,7 @@ def generate_image(prompt: str, image_size: str, num_images: int, enable_safety_
         num_images=num_images,
         enable_safety_checker=enable_safety_checker,
         safety_tolerance=safety_tolerance,
-        seed=seed,
+        seed=seed if seed != 0 else None,
         sync_mode=sync_mode
     )
     return response.data[0].b64_json
@@ -188,3 +188,11 @@ def main():
             prompt=prompt,
             image_size=image_size,
             num_images=num_images,
+            enable_safety_checker=enable_safety_checker,
+            safety_tolerance=safety_tolerance,
+            seed=seed,
+            sync_mode=sync_mode
+        )
+
+        # Access the image_data to display or process it
+        st.image(image_data, caption="Generated Image")
