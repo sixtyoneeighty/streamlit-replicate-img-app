@@ -8,7 +8,7 @@ from streamlit_image_select import image_select
 genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 
 # Configure Together API
-client = Together(api_key=os.environ.get('TOGETHER_API_KEY'))
+client = Together(api_key=os.environ.get('TOGETHER_API_TOKEN'))
 
 # Configure page layout
 st.set_page_config(page_title="sixtyoneeighty Image AI", layout="wide")
@@ -72,7 +72,7 @@ st.markdown(
 st.markdown("# sixtyoneeighty")
 
 # Hardcoded TOGETHER model
-TOGETHER_MODEL_ENDPOINT = "black-forest-labs/flux-pro"
+TOGETHER_MODEL_ENDPOINT = "black-forest-labs/FLUX.1.1-pro"
 # Access TOGETHER API token from
 TOGETHER_API_TOKEN = st.secrets["TOGETHER_API_TOKEN"]
 
@@ -156,9 +156,9 @@ def configure_sidebar():
                 image_size = st.selectbox("Image Size", ["square_hd", "square", "portrait_4_3", "portrait_16_9", "landscape_4_3", "landscape_16_9"], index=4)
                 seed = st.number_input("Seed (optional)", value=0, min_value=0, step=1)
                 sync_mode = st.checkbox("Sync Mode", value=True)
-                num_images = st.slider("Number of images to generate", value=1, min_value=1, max_value=10)
+                num_images = st.slider("Number of images to generate", value=1, min_value=1, max_value=2)
                 enable_safety_checker = st.checkbox("Enable Safety Checker", value=False)
-                safety_tolerance = st.selectbox("Safety Tolerance", ["1", "2", "3", "4", "5", "6"], index=1)
+                safety_tolerance = st.selectbox("Safety Tolerance", ["1", "2", "3", "4", "5", "6"], index=5)
 
             submitted = st.form_submit_button("Generate Image")
 
