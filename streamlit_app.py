@@ -1,5 +1,6 @@
 import os
 import replicate
+from together import Together
 import streamlit as st
 import google.generativeai as genai
 from streamlit_image_select import image_select
@@ -69,8 +70,11 @@ st.markdown("# sixtyoneeighty")
 
 # Hardcoded Replicate model
 REPLICATE_MODEL_ENDPOINT = "black-forest-labs/flux-dev"
-
 # Access Replicate API token from secrets
+REPLICATE_API_TOKEN = st.secrets["REPLICATE_API_TOKEN"]
+
+# Initialize Together client
+client = Together(api_key=os.environ.get('TOGETHER_API_KEY'))
 REPLICATE_API_TOKEN = st.secrets["REPLICATE_API_TOKEN"]
 
 # Placeholders for images and gallery
@@ -169,24 +173,14 @@ def configure_sidebar() -> tuple:
             st.markdown('</div>', unsafe_allow_html=True)
 
         # Resource section with the new link and no 'Replicate AI' text
-        st.markdown(":orange[**Resources:**]  \n[Your guide to sixtyoneeighty Image AI](https://sites.google.com/sixtyoneeightyai.com/imageai/home)")
-
-        return submitted, width, height, num_outputs, guidance_scale, num_inference_steps, aspect_ratio, output_format, output_quality, disable_safety_checker, prompt, skip_enhancement
-
-def generate_image(prompt: str, width: int, height: int, num_outputs: int, guidance_scale: float, num_inference_steps: int, aspect_ratio: str, output_format: str, output_quality: int, disable_safety_checker: bool) -> str:
-    output = replicate.run(
-        REPLICATE_MODEL_ENDPOINT,
-        input={
-            "prompt": prompt,
-            "width": width,
-            "height": height,
-            "num_outputs": num_outputs,
-            "guidance": guidance_scale,
-            "num_inference_steps": num_inference_steps,
-            "aspect_ratio": aspect_ratio,
-            "output_format": output_format,
-            "output_quality": output_quality,
-            "disable_safety_checker": disable_safety_checker
+def generate_image(prompt_text: str):
+    response = client.images.generate(
+        prompt=prompt_text,
+        model="black-forest-labs/FLUX.1.1-pro",
+        steps=10,
+        n=4
+    )
+    return response.data[0].b64_jsonble_safety_checker": disable_safety_checker
         },
         auth=REPLICATE_API_TOKEN
     )
