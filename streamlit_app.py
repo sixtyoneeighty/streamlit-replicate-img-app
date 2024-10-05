@@ -1,4 +1,3 @@
-import os
 import streamlit as st
 import google.generativeai as genai
 from streamlit_image_select import image_select
@@ -66,7 +65,6 @@ Your prompt should include the following elements if applicable:
 def get_enhanced_prompt(topic: str) -> str:
     """Use Gemini API to enhance the user's prompt."""
     prompt_text = f"""Please create a creative and detailed image generation prompt based on the following information:
-
 Topic: {topic}
 
 Your prompt should include the following elements if applicable:
@@ -79,7 +77,6 @@ Your prompt should include the following elements if applicable:
 7. Additional Elements: Background, poses, actions, other objects in the photo."""
 
     model = genai.GenerativeModel(
-        model_name="gemini-1.5-pro-latest",  # Updated model name
         generation_config={
             "temperature": 1.0,  # Updated temperature value
             "top_p": 0.95,
@@ -114,24 +111,25 @@ def configure_sidebar() -> tuple:
                 logging.error(f"Error with checkbox: {e}")
                 skip_enhancement = False
 
-            # Buttons
-            st.markdown('<div class="button-container">', unsafe_allow_html=True)
+            # Advanced settings
+            with st.expander("**Advanced Settings**"):
+                try:
+                    image_size = st.selectbox("Image Size", ["square_hd", "square", "portrait_4_3", "portrait_16_9", "landscape_4_3", "landscape_16_9"], index=4)
+                    seed = st.number_input("Seed (optional)", value=0, min_value=0, step=1)
+                    sync_mode = st.checkbox("Sync Mode", value=True)
+                    num_images = st.slider("Number of images to generate", value=1, min_value=1, max_value=10)
+                    enable_safety_checker = st.checkbox("Enable Safety Checker", value=True)
+                    safety_tolerance = st.selectbox("Safety Tolerance", ["1", "2", "3", "4", "5", "6"], index=1)
+                except Exception as e:
+                    logging.error(f"Error with advanced settings: {e}")
+
             try:
-                submitted = st.form_submit_button("Generate Image", type="primary")
-                if st.form_submit_button("Clear"):
-                    st.session_state["prompt"] = ""
-                    st.experimental_rerun()
+                submitted = st.form_submit_button("Generate Image")
             except Exception as e:
-                logging.error(f"Error with form buttons: {e}")
+                logging.error(f"Error with form submit button: {e}")
                 submitted = False
-            st.markdown("</div>", unsafe_allow_html=True)
 
-        # Resource section with the new link and no 'Replicate AI' text
-        st.markdown(
-            ':orange[**Resources:**]  \n[Your guide to sixtyoneeighty Image AI](https://sites.google.com/sixtyoneeightyai.com/imageai/home)'
-        )
-
-        return submitted, prompt, skip_enhancement
+    return (submitted, prompt, image_size, seed, sync_mode, num_images, enable_safety_checker, safety_tolerance, skip_enhancement)
 def generate_image(prompt: str) -> str:
     try:
         response = client.images.generate(
@@ -190,7 +188,7 @@ def main_page(submitted: bool, topic: str, skip_enhancement: bool) -> None:
     else:
         with gallery_placeholder.container():
             img = image_select(
-                label="Want to save an image? Right-click and save!",
+            # img = image_select(save an image? Right-click and save!",
                 images=[
                     "gallery/futurecity.webp",
                     "gallery/robot.webp",
@@ -211,13 +209,24 @@ def main_page(submitted: bool, topic: str, skip_enhancement: bool) -> None:
                 ],
                 use_container_width=True,
             )
-
 def main():
     (
         submitted,
         prompt,
-        skip_enhancement,
+        image_size,
+        # image_size,
+        # seed,mode,
+        # sync_mode,,
+        # num_images,ty_checker,
+        # enable_safety_checker,
+        # safety_tolerance,
     ) = configure_sidebar()
+
+    if submitted:
+        if not skip_enhancement:
+            prompt = get_enhanced_prompt(prompt)
+        image_data = generate_image(prompt)
+        st.image(image_data, use_column_width=True)
     main_page(submitted, prompt, skip_enhancement)
 
 if __name__ == "__main__":
