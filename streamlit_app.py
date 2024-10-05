@@ -97,7 +97,7 @@ Your prompt should include the following elements if applicable:
 7. Additional Elements: Background, poses, actions, other objects in the photo."""
     
     model = genai.GenerativeModel(
-        model_name="gemini-1.5-pro-latest",
+        model_name="gemini-1.5-flash-latest",
         generation_config={
             "temperature": 1.3,
             "top_p": 0.95,
