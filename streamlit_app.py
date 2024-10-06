@@ -119,7 +119,7 @@ T5 Prompt: [Detailed natural language description]
 CLIP Prompt: [Concise keyword list]"""
     
     model = genai.GenerativeModel(
-        model_name="gemini-1.5-pro-latest",
+        model_name="gemini-1.5-flash-latest",
         generation_config={
             "temperature": 1.4,
             "top_p": 0.95,
