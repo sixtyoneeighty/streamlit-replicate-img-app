@@ -83,23 +83,45 @@ if "prompt" not in st.session_state:
 
 def get_enhanced_prompt(topic: str) -> str:
     """Use Gemini API to enhance the user's prompt."""
-    prompt_text = f"""Please create a creative and detailed image generation prompt based on the following information:
+    prompt_text = f"""You are an AI assistant specialized in creating comprehensive text-to-image prompts for the Flux image generation model. Flux requires two complementary prompts that work together to generate a single, cohesive image: Please create a creative and detailed image generation prompt based on the following information:
 
 Topic: {topic}
 
-Your prompt should include the following elements if applicable:
-1. Subject: The main focus of the image.
-2. Style: The artistic approach or visual aesthetic.
-3. Composition: How elements are arranged within the frame.
-4. Lighting: The type and quality of light in the scene.
-5. Mood/Atmosphere: The emotional tone or ambiance of the image.
-6. Technical Details: Camera settings, perspective, or specific visual techniques.
-7. Additional Elements: Background, poses, actions, other objects in the photo."""
+1. T5 Prompt (Natural Language):
+- Provide an extremely detailed description of the image in natural language, using up to 512 tokens.
+- Break down the scene into key components: subjects, setting, lighting, colors, composition, and atmosphere.
+- Describe subjects in great detail, including their appearance, pose, expression, clothing, and any interactions between them.
+- Elaborate on the setting, specifying the time of day, location specifics, architectural details, and any relevant objects or props.
+- Explain the lighting conditions, including the source, intensity, shadows, and how it affects the overall scene.
+- Specify color palettes and any significant color contrasts or harmonies that contribute to the image's visual impact.
+- Detail the composition, describing the foreground, middle ground, background, and focal points to create a sense of depth and guide the viewer's eye.
+- Convey the overall mood and atmosphere of the scene, using emotive language to evoke the desired feeling.
+- Use vivid, descriptive language to paint a clear picture, as Flux follows instructions precisely but lacks inherent creativity.
+- Avoid using grammatically negative statements or describing what the image should not include, as Flux may struggle to interpret these correctly. Instead, focus on positively stating what should be present in the image.
+
+2. CLIP Prompt (Keywords):
+- Create a concise list of essential keywords and phrases, limited to 50-60 tokens (maximum 70).
+- Prioritize the keywords in this order: main subject(s), art style, setting, important features, emotions/mood, lighting, and color scheme.
+- Include relevant artistic techniques, visual effects, or stylistic elements if applicable to the requested image.
+- Use commas to separate keywords and phrases, ensuring clarity and readability.
+- Ensure that the keywords align perfectly with the details provided in the T5 prompt, as both prompts work together to generate the final image.
+- Focus on keywords that positively describe what should be present in the image, rather than using keywords that negate or exclude certain elements.
+
+When generating these prompts:
+- Understand that the T5 and CLIP prompts are deeply connected and must align perfectly to create a single, cohesive image.
+- Adapt your language and terminology to the requested art style (e.g., photorealistic, anime, oil painting) to maintain consistency across both prompts.
+- Consider potential visual symbolism, metaphors, or allegories that could enhance the image's meaning and impact, and include them in both prompts when relevant.
+- For character-focused images, emphasize personality traits and emotions through visual cues such as facial expressions, body language, and clothing choices, ensuring consistency between the T5 and CLIP prompts.
+- Maintain grammatically positive statements throughout both prompts, focusing on what the image should include rather than what it should not, as Flux may struggle with interpreting negative statements accurately.
+
+Present your response in this format with no additional informatiom or elaboration:
+T5 Prompt: [Detailed natural language description]
+CLIP Prompt: [Concise keyword list]"""
     
     model = genai.GenerativeModel(
-        model_name="gemini-1.5-flash-latest",
+        model_name="gemini-1.5-pro-latest",
         generation_config={
-            "temperature": 1.3,
+            "temperature": 1.4,
             "top_p": 0.95,
             "top_k": 64,
             "max_output_tokens": 8192,
