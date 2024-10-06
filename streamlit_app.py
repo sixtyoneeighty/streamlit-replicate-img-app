@@ -87,7 +87,7 @@ def get_enhanced_prompt(topic: str) -> str:
 
 Topic: {topic}
 
-1. T5 Prompt (Natural Language):
+1. Enhanced Prompt (Natural Language):
 - Provide an extremely detailed description of the image in natural language, using up to 512 tokens.
 - Break down the scene into key components: subjects, setting, lighting, colors, composition, and atmosphere.
 - Describe subjects in great detail, including their appearance, pose, expression, clothing, and any interactions between them.
@@ -99,7 +99,7 @@ Topic: {topic}
 - Use vivid, descriptive language to paint a clear picture, as Flux follows instructions precisely but lacks inherent creativity.
 - Avoid using grammatically negative statements or describing what the image should not include, as Flux may struggle to interpret these correctly. Instead, focus on positively stating what should be present in the image.
 
-2. CLIP Prompt (Keywords):
+2. Keyword Prompt (Concise Keywords):
 - Create a concise list of essential keywords and phrases, limited to 50-60 tokens (maximum 70).
 - Prioritize the keywords in this order: main subject(s), art style, setting, important features, emotions/mood, lighting, and color scheme.
 - Include relevant artistic techniques, visual effects, or stylistic elements if applicable to the requested image.
@@ -115,11 +115,11 @@ When generating these prompts:
 - Maintain grammatically positive statements throughout both prompts, focusing on what the image should include rather than what it should not, as Flux may struggle with interpreting negative statements accurately.
 
 Present your response in this format with no additional informatiom or elaboration:
-T5 Prompt: [Detailed natural language description]
-CLIP Prompt: [Concise keyword list]"""
+Enhanced Prompt: [Detailed natural language description]
+Keyword Prompt: [Concise keyword list]"""
     
     model = genai.GenerativeModel(
-        model_name="gemini-1.5-flash-latest",
+        model_name="gemini-1.5-pro-latest",
         generation_config={
             "temperature": 1.4,
             "top_p": 0.95,
