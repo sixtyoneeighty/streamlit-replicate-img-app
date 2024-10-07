@@ -123,7 +123,7 @@ Keywords: [Concise keyword list]"""
     response = client.chat.completions.create(
         model="chatgpt-4o-latest",
         messages=[{"role": "user", "content": prompt_text}],
-        temperature=0.7,
+        temperature=0.8,
         max_tokens=2048,
         top_p=0.9,
         frequency_penalty=0.5,
@@ -163,7 +163,7 @@ def generate_image(prompt: str) -> Image.Image:
         model="black-forest-labs/FLUX.1.1-pro",
         width=1024,
         height=768,
-        steps=75,
+        steps=4,
         n=1,
         response_format="b64_json"
     )
