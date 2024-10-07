@@ -162,9 +162,8 @@ def generate_image(prompt: str) -> Image.Image:
         prompt=prompt,
         model="black-forest-labs/FLUX.1.1-pro",
         width=1024,
-        height=1024,
-        steps=40,
-        n=1,
+        height=768,
+        safety_tolerance=0
         response_format="b64_json"
     )
     image_data = base64.b64decode(response.data[0].b64_json)
