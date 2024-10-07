@@ -3,8 +3,8 @@ import streamlit as st
 from openai import OpenAI
 from streamlit_image_select import image_select
 from together import Together
-import base64
 from datetime import datetime
+import base64
 
 # Ensure the directory for generated images exists
 if not os.path.exists("generated_images"):
