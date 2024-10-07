@@ -155,6 +155,7 @@ def configure_sidebar() -> tuple:
 
         return submitted, prompt, skip_enhancement
 
+@st.cache_data
 def generate_image(prompt: str) -> bytes:
     response = together_client.images.generate(
         prompt=prompt,
@@ -171,7 +172,7 @@ def generate_image(prompt: str) -> bytes:
 def main_page(submitted: bool, topic: str, skip_enhancement: bool) -> None:
     if submitted:
         gallery_placeholder.empty()
-        with st.status('Generating image...', expanded=True):
+        with st.spinner('Generating image...'):
             try:
                 if not skip_enhancement:
                     enhanced_prompt = get_enhanced_prompt(topic)
