@@ -4,8 +4,6 @@ from openai import OpenAI
 from streamlit_image_select import image_select
 from together import Together
 import base64
-from io import BytesIO
-from PIL import Image
 
 # Configure OpenAI client with Streamlit secrets
 client = OpenAI(api_key=st.secrets["OPENAI_API_TOKEN"])

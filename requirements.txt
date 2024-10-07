@@ -1,6 +1,5 @@
 together==1.3.1
 streamlit==1.36.0
-Pillow
 streamlit-image-select
 openai==1.51.0
 requests
