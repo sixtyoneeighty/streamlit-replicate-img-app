@@ -3,7 +3,12 @@ import streamlit as st
 from openai import OpenAI
 from streamlit_image_select import image_select
 from together import Together
+import base64
+from datetime import datetime
 
+# Ensure the directory for generated images exists
+if not os.path.exists("generated_images"):
+    os.makedirs("generated_images")
 
 # Configure OpenAI client with Streamlit secrets
 client = OpenAI(api_key=st.secrets["OPENAI_API_TOKEN"])
@@ -156,18 +161,24 @@ def configure_sidebar() -> tuple:
         return submitted, prompt, skip_enhancement
 
 @st.cache_data
-def generate_image(prompt: str) -> bytes:
+def generate_image(prompt: str) -> str:
     response = together_client.images.generate(
         prompt=prompt,
         model="black-forest-labs/FLUX.1.1-pro",
         width=1024,
         height=768,
-        steps=1,
-        safety_tolerance=0,
+        n=1,
         response_format="b64_json"
     )
     image_data = base64.b64decode(response.data[0].b64_json)
-    return image_data
+    
+    # Save the image to a file
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    image_path = f"generated_images/image_{timestamp}.png"
+    with open(image_path, "wb") as f:
+        f.write(image_data)
+    
+    return image_path
 
 def main_page(submitted: bool, topic: str, skip_enhancement: bool) -> None:
     if submitted:
@@ -180,10 +191,10 @@ def main_page(submitted: bool, topic: str, skip_enhancement: bool) -> None:
                 else:
                     cleaned_prompt = topic
 
-                output_image = generate_image(cleaned_prompt)
+                image_path = generate_image(cleaned_prompt)
                 
-                if output_image:
-                    st.image(output_image, use_column_width=False, width=400)
+                if image_path:
+                    st.image(image_path, use_column_width=False, width=400)
                     st.markdown(f"<p style='font-size:14px; color:purple;'><strong>Your new enhanced prompt:</strong> {cleaned_prompt}</p>", unsafe_allow_html=True)
                 else:
                     st.error("Failed to generate image.")
