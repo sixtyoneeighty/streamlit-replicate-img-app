@@ -160,7 +160,7 @@ def configure_sidebar() -> tuple:
 def generate_image(prompt: str) -> Image.Image:
     response = together_client.images.generate(
         prompt=prompt,
-        model="black-forest-labs/FLUX.1-pro",
+        model="black-forest-labs/FLUX.1.1-pro",
         width=1024,
         height=768,
         safety_tolerance=0,
