@@ -83,7 +83,7 @@ if "prompt" not in st.session_state:
 
 def get_enhanced_prompt(topic: str) -> str:
     """Use Gemini API to enhance the user's prompt."""
-    prompt_text = f"""You are an AI assistant specialized in creating comprehensive text-to-image prompts for the Flux image generation model. Flux requires two complementary prompts that work together to generate a single, cohesive image: Please create a creative and detailed image generation prompt based on the following information:
+    prompt_text = f"""You are an AI assistant specializing in refining user prompts for the Flux image generation model. Flux requires two complementary prompts that work together to create one cohesive image. When refining user prompts, follow these guidelines:
 
 Topic: {topic}
 
@@ -93,6 +93,7 @@ Topic: {topic}
 - Describe subjects in great detail, including their appearance, pose, expression, clothing, and any interactions between them.
 - Elaborate on the setting, specifying the time of day, location specifics, architectural details, and any relevant objects or props.
 - Explain the lighting conditions, including the source, intensity, shadows, and how it affects the overall scene.
+- Using your knowledge set, select an appropriate high end camera and lens combination that should be used to capture the image.
 - Specify color palettes and any significant color contrasts or harmonies that contribute to the image's visual impact.
 - Detail the composition, describing the foreground, middle ground, background, and focal points to create a sense of depth and guide the viewer's eye.
 - Convey the overall mood and atmosphere of the scene, using emotive language to evoke the desired feeling.
@@ -104,24 +105,25 @@ Topic: {topic}
 - Prioritize the keywords in this order: main subject(s), art style, setting, important features, emotions/mood, lighting, and color scheme.
 - Include relevant artistic techniques, visual effects, or stylistic elements if applicable to the requested image.
 - Use commas to separate keywords and phrases, ensuring clarity and readability.
-- Ensure that the keywords align perfectly with the details provided in the T5 prompt, as both prompts work together to generate the final image.
+- Ensure that the keywords align perfectly with the details provided in the Enhanced prompt, as both prompts work together to generate the final image.
 - Focus on keywords that positively describe what should be present in the image, rather than using keywords that negate or exclude certain elements.
 
 When generating these prompts:
-- Understand that the T5 and CLIP prompts are deeply connected and must align perfectly to create a single, cohesive image.
-- Adapt your language and terminology to the requested art style (e.g., photorealistic, anime, oil painting) to maintain consistency across both prompts.
+- Understand that the Enhanced and Keyword prompts are deeply connected and must align perfectly to create a single, cohesive image.
+- Adapt your language and terminology to the requested art style (e.g., photorealistic, anime, oil painting) to maintain consistency across both prompts. Default style should be photorealistic unless it is stated otherwise in users original prompt.
 - Consider potential visual symbolism, metaphors, or allegories that could enhance the image's meaning and impact, and include them in both prompts when relevant.
 - For character-focused images, emphasize personality traits and emotions through visual cues such as facial expressions, body language, and clothing choices, ensuring consistency between the T5 and CLIP prompts.
 - Maintain grammatically positive statements throughout both prompts, focusing on what the image should include rather than what it should not, as Flux may struggle with interpreting negative statements accurately.
+- The enhancements should not take away or change the overall context of the original prompt, the objective is to bring the image to life not change the core vision of it.
 
-Present your response in this format with no additional informatiom or elaboration:
+Present your response in this format with no additional information or elaboration included:
 Enhanced Prompt: [Detailed natural language description]
-Keyword Prompt: [Concise keyword list]"""
+Keywords: [Concise keyword list]"""
     
     model = genai.GenerativeModel(
         model_name="gemini-1.5-pro-latest",
         generation_config={
-            "temperature": 1.4,
+            "temperature": 1.0,
             "top_p": 0.95,
             "top_k": 64,
             "max_output_tokens": 8192,
