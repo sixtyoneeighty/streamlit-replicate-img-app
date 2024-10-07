@@ -161,8 +161,8 @@ def generate_image(prompt: str) -> Image.Image:
     response = together_client.images.generate(
         prompt=prompt,
         model="black-forest-labs/FLUX.1.1-pro",
-        width=562,
-        height=562,
+        width=640,
+        height=640,
         steps=1,
         n=1,
         response_format="b64_json"
