@@ -169,15 +169,21 @@ def generate_image(prompt: str) -> str:
         model="black-forest-labs/FLUX.1.1-pro",
         width=1024,
         height=768,
+        steps=1,
         n=1,
         response_format="b64_json"
     )
     image_data = base64.b64decode(response.data[0].b64_json)
     
-    # Convert the image from JPG to PNG
+    # Save original image data
+    original_path = f"generated_images/original_{datetime.now().strftime('%Y%m%d%H%M%S')}.jpg"
+    with open(original_path, "wb") as f:
+        f.write(image_data)
+    
+    # Open the image using Pillow and save as PNG
     image = Image.open(BytesIO(image_data))
     png_image_path = f"generated_images/image_{datetime.now().strftime('%Y%m%d%H%M%S')}.png"
-    image.save(png_image_path, format="PNG")
+    image.save(png_image_path, format="PNG", compress_level=0)
     
     return png_image_path
 
