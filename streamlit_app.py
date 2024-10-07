@@ -5,6 +5,8 @@ from streamlit_image_select import image_select
 from together import Together
 from datetime import datetime
 import base64
+from PIL import Image
+from io import BytesIO
 
 # Ensure the directory for generated images exists
 if not os.path.exists("generated_images"):
@@ -167,20 +169,17 @@ def generate_image(prompt: str) -> str:
         model="black-forest-labs/FLUX.1.1-pro",
         width=1024,
         height=768,
-        output_format="png",
-        output_quality=100,
         n=1,
         response_format="b64_json"
     )
     image_data = base64.b64decode(response.data[0].b64_json)
     
-    # Save the image to a file
-    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-    image_path = f"generated_images/image_{timestamp}.png"
-    with open(image_path, "wb") as f:
-        f.write(image_data)
+    # Convert the image from JPG to PNG
+    image = Image.open(BytesIO(image_data))
+    png_image_path = f"generated_images/image_{datetime.now().strftime('%Y%m%d%H%M%S')}.png"
+    image.save(png_image_path, format="PNG")
     
-    return image_path
+    return png_image_path
 
 def main_page(submitted: bool, topic: str, skip_enhancement: bool) -> None:
     if submitted:
