@@ -163,7 +163,7 @@ def generate_image(prompt: str) -> Image.Image:
         model="black-forest-labs/FLUX.1.1-pro",
         width=1024,
         height=768,
-        steps=1,
+        steps=75,
         n=1,
         response_format="b64_json"
     )
