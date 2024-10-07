@@ -155,7 +155,7 @@ def configure_sidebar() -> tuple:
 
         return submitted, prompt, skip_enhancement
 
-def generate_image(prompt: str) -> Image.Image:
+def generate_image(prompt: str) -> bytes:
     response = together_client.images.generate(
         prompt=prompt,
         model="black-forest-labs/FLUX.1.1-pro",
@@ -166,8 +166,7 @@ def generate_image(prompt: str) -> Image.Image:
         response_format="b64_json"
     )
     image_data = base64.b64decode(response.data[0].b64_json)
-    image = Image.open(BytesIO(image_data))
-    return image
+    return image_data
 
 def main_page(submitted: bool, topic: str, skip_enhancement: bool) -> None:
     if submitted:
