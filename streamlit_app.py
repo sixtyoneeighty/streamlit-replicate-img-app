@@ -186,11 +186,10 @@ def main_page(submitted: bool, topic: str, skip_enhancement: bool) -> None:
         gallery_placeholder.empty()
         with st.spinner('Generating image...'):
             try:
+                cleaned_prompt = topic
                 if not skip_enhancement:
                     enhanced_prompt = get_enhanced_prompt(topic)
                     cleaned_prompt = enhanced_prompt if isinstance(enhanced_prompt, str) else enhanced_prompt.get("prompt", "")
-                else:
-                    cleaned_prompt = topic
 
                 image_path = generate_image(cleaned_prompt)
                 
