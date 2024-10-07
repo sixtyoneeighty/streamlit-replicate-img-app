@@ -1,14 +1,14 @@
 import os
 import streamlit as st
-import google.generativeai as genai
+from openai import OpenAI
 from streamlit_image_select import image_select
 from together import Together
 import base64
 from io import BytesIO
 from PIL import Image
 
-# Configure Gemini API with Streamlit secrets
-genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
+# Configure OpenAI client with Streamlit secrets
+client = OpenAI(api_key=st.secrets["OPENAI_API_TOKEN"])
 
 # Configure Together AI client
 together_client = Together(api_key=st.secrets["TOGETHER_API_KEY"])
@@ -82,7 +82,7 @@ if "prompt" not in st.session_state:
     st.session_state["prompt"] = ""
 
 def get_enhanced_prompt(topic: str) -> str:
-    """Use Gemini API to enhance the user's prompt."""
+    """Use OpenAI API to enhance the user's prompt."""
     prompt_text = f"""You are an AI assistant specializing in refining user prompts for the Flux image generation model. Flux requires two complementary prompts that work together to create one cohesive image. When refining user prompts, follow these guidelines:
 
 Topic: {topic}
@@ -120,18 +120,16 @@ Present your response in this format with no additional information or elaborati
 Enhanced Prompt: [Detailed natural language description]
 Keywords: [Concise keyword list]"""
     
-    model = genai.GenerativeModel(
-        model_name="gemini-1.5-flash-latest",
-        generation_config={
-            "temperature": 1.0,
-            "top_p": 0.95,
-            "top_k": 64,
-            "max_output_tokens": 8192,
-        }
+    response = client.chat.completions.create(
+        model="chatgpt-4o-latest",
+        messages=[{"role": "user", "content": prompt_text}],
+        temperature=0.7,
+        max_tokens=2048,
+        top_p=0.9,
+        frequency_penalty=0.5,
+        presence_penalty=0.3
     )
-    chat_session = model.start_chat(history=[])
-    response = chat_session.send_message(prompt_text)
-    return response.text
+    return response.choices[0].message.content
 
 def configure_sidebar() -> tuple:
     with st.sidebar:
